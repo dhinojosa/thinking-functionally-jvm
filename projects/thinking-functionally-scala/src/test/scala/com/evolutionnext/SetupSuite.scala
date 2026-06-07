@@ -1,4 +1,4 @@
-package com.thinkingfunctionally
+package com.evolutionnext
 
 import cats.syntax.all.*
 

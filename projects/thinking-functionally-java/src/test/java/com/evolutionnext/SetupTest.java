@@ -1,4 +1,4 @@
-package com.thinkingfunctionally;
+package com.evolutionnext;
 
 import org.junit.jupiter.api.Test;
 
