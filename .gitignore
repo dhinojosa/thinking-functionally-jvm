@@ -18,3 +18,11 @@ buildNumber.properties
 .classpath
 
 .idea
+*.iml
+out/
+
+### Kotlin / Gradle template
+.gradle/
+build/
+.kotlin/
+local.properties
