@@ -19,16 +19,68 @@ In Thinking Functionally in Java, we explore how far disciplined functional desi
 
 1. Consistent Builds with Nix, Docker/DevContainers, or SDKMan
 2. Java Functions
-   a. `Function`, `Predicate`, `Supplier`, `Consumer`
-3. Immutability with Records   
-4. Streams, Laziness, and Delayed Computation
-5. Composition with `andThen` or `compose`   
-6. Algebraic Data Types `sealed`
-7. Mapping, FlatMapping, Filtering
-8. Applicatives, Functors and Monads
-9. Errors as Data
-10. Typeclasses
-11. Higher-Kinded Types
-12. Effect Systems
-13. Data(Components + Programs) + Interpreter = Entire System
-14. Where do you go from here?
+
+   a. `Function`
+   
+   b. `Predicate`
+   
+   c. `Supplier`
+   
+   d. `Consumer`
+   
+4. Immutability with Records   
+5. Streams, Laziness, and Delayed Computation
+6. Composition with `andThen` or `compose`   
+7. Mapping, FlatMapping, Filtering, and Reducing - Common Functional Behaviors
+
+   a. `Optional`
+
+   b. `Stream`
+
+   c. `CompletableFuture`
+   
+9. Algebraic Data Types with `sealed`
+
+   a. Describing Commands
+
+   b. Describing Results
+
+   c. Describing Collections
+
+   d. Describing Errors
+   
+11. Errors as Data
+
+   a. `Optional`/`Option`
+   
+   b. `Result`
+   
+   c. `Either`
+   
+   d. `Validated`
+   
+12. Typeclasses
+    
+    a. `Show`
+    
+    b. `Eq`
+    
+    c. `Order`
+
+    d. `Comparator`
+    
+    e. What does this have to do with Java?
+
+    https://youtu.be/Gz7Or9C0TpM?si=91poKYRiPh6l2YW9&t=1259
+    
+14. Higher-Kinded Types
+
+    a. `F[A]` 
+    
+    b. Reusable Programs
+    
+12. Monoid, Applicatives, Functors, Monads, Traverse, and More    
+13. Effect Systems
+14. Data(Components + Programs) + Interpreter = Entire System
+15. The identity crisis: "Direct-Style" vs. "Functional-Style."
+16. Breaking down the wall: A look at Effect Systems on the JVM
