@@ -30,8 +30,20 @@ In Thinking Functionally in Java, we explore how far disciplined functional desi
    
 4. Immutability with Records   
 5. Streams, Laziness, and Delayed Computation
-6. Composition with `andThen` or `compose`   
-7. Mapping, FlatMapping, Filtering, and Reducing - Common Functional Behaviors
+6. Composition with `andThen` or `compose`
+7. Functional Design Principles
+
+   a. One Method, One Responsibility
+
+   b. Separate Commands from Queries
+
+   c. Separate Pure Logic from Side Effects
+
+   d. Explicit Data Models
+
+   e. Composition over Inheritance
+   
+9. Mapping, FlatMapping, Filtering, and Reducing - Common Functional Behaviors
 
    a. `Optional`
 
@@ -39,7 +51,7 @@ In Thinking Functionally in Java, we explore how far disciplined functional desi
 
    c. `CompletableFuture`
    
-9. Algebraic Data Types with `sealed`
+10. Algebraic Data Types with `sealed`
 
     a. Describing Commands
 
