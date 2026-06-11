@@ -41,7 +41,9 @@ In Thinking Functionally in Java, we explore how far disciplined functional desi
 
    d. Explicit Data Models
 
-   e. Composition over Inheritance
+   e. Referential Transparency
+
+   f. Composition over Inheritance
    
 9. Mapping, FlatMapping, Filtering, and Reducing - Common Functional Behaviors
 
