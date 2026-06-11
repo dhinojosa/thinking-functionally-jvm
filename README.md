@@ -13,3 +13,22 @@ In Thinking Functionally in Java, we explore how far disciplined functional desi
 * Errors as Data: Replacing exception-driven control flow with explicit result types (Either, Try).
 * Putting It Together: Designing a small, readable service that isolates side effects and composes cleanly.
 * Breaking the Java Wall: A look at higher-kinded types, effects, and what Java still can’t express in languages other than Java
+
+
+## Syllabus
+
+1. Consistent Builds with Nix, Docker/DevContainers, or SDKMan
+2. Java Functions
+   a. `Function`, `Predicate`, `Supplier`, `Consumer`
+3. Immutability with Records   
+4. Streams, Laziness, and Delayed Computation
+5. Composition with `andThen` or `compose`   
+6. Algebraic Data Types `sealed`
+7. Mapping, FlatMapping, Filtering
+8. Applicatives, Functors and Monads
+9. Errors as Data
+10. Typeclasses
+11. Higher-Kinded Types
+12. Effect Systems
+13. Data(Components + Programs) + Interpreter = Entire System
+14. Where do you go from here?
