@@ -80,7 +80,6 @@ In Thinking Functionally in Java, we explore how far disciplined functional desi
     b. Reusable Programs
     
 12. Monoid, Applicatives, Functors, Monads, Traverse, and More    
-13. Effect Systems
-14. Data(Components + Programs) + Interpreter = Entire System
-15. The identity crisis: "Direct-Style" vs. "Functional-Style."
-16. Breaking down the wall: A look at Effect Systems on the JVM
+13. Data(Components + Programs) + Interpreter = Entire System
+14. The identity crisis: "Direct-Style" vs. "Functional-Style."
+15. Breaking down the Java wall: A look at Effect Systems on the JVM
