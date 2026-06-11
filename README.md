@@ -41,23 +41,23 @@ In Thinking Functionally in Java, we explore how far disciplined functional desi
    
 9. Algebraic Data Types with `sealed`
 
-   a. Describing Commands
+    a. Describing Commands
 
-   b. Describing Results
+    b. Describing Results
 
-   c. Describing Collections
+    c. Describing Collections
 
-   d. Describing Errors
+    d. Describing Errors
    
 11. Errors as Data
 
-   a. `Optional`/`Option`
+    a. `Optional`/`Option`
    
-   b. `Result`
+    b. `Result`
    
-   c. `Either`
+    c. `Either`
    
-   d. `Validated`
+    d. `Validated`
    
 12. Typeclasses
     
