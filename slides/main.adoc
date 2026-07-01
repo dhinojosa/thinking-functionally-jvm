@@ -1,0 +1,28 @@
+= Thinking Functionally in the JVM
+Daniel Hinojosa
+:icons: font
+:imagesdir: ./images
+:star: *
+:starline: *_
+:starstar: **
+:underscore: _
+:toc: left
+:backend: revealjs
+:title-slide-background-image: iStock-1181695869.jpg
+:customcss: training-styles/custom.css
+:topic: state=title
+:lt: <
+:gt: >
+:revealjs_hash: true
+:source-highlighter: highlightjs
+:highlightjs-theme: training-styles/color-brewer.css
+:highlightjs-languages: java, yaml, toml, json, gherkin, scala, kotlin
+:experimental:
+:revealjs_theme: white
+
+[.chapter]
+== Section 1
+image::iStock-1075835580.jpg[background, size=cover]
+
+include::chapters/chapter1.adoc[]
+
