@@ -163,7 +163,7 @@ p.author {
     margin: 1.7em 0 1.7em 0.3em;
     overflow: auto;
     width: 93%;
-
+    box-shadow: none;
 }
 
 /* target IE7 and IE6 */
@@ -292,7 +292,7 @@ section.chapter > h2 > code {
     border-radius: 4px;
     font-family: 'Lato', sans-serif;
     font-weight: bold;
-    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
+    box-shadow: none;
 }
 
 /* Title bar container */
