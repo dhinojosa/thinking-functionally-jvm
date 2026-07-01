@@ -7,17 +7,51 @@ image::iStock-1181695869.jpg[background, size=cover]
 
 * Replace any function call with its return value and the program behaves the same
 * No hidden state, no side effects — the same input always yields the same output
-
++
 [source,java]
 ----
-// Referentially transparent
 int add(int a, int b) { return a + b; }
+----
++
+* Compare the above to the following, which is *not referentially transparent* we cannot replace the call with its result
++
+[source,java]
+----
+// Side effect: printing makes this irreplaceable
+int addAndPrint(int a, int b) {
+    int result = a + b;
+    System.out.println(result); // IO changes the world
+    return result;
+}
 ----
 
 === Single Responsibility Principle
 
 * Each function does exactly one thing
 * Small, focused functions are easier to test, name, and compose
+* Violation — one method *fetches*, *validates*, and *saves*:
++
+[source,java]
+----
+void processUser(User u) {
+    var data = db.fetch(u.id());    // <1>
+    if (data == null) throw ...;    // <2>
+    db.save(data.activate()); // <3>
+}
+----
++
+<1> Fetching the data
+<2> Validating the data
+<3> Taking the data, activating it, and saving it
++
+* Cleaned up — each function has one job:
++
+[source,java]
+----
+var data   = fetch(u.id());
+var valid  = validate(data);
+db.save(data.activate());
+----
 
 === Separate Side Effects
 
@@ -26,7 +60,7 @@ int add(int a, int b) { return a + b; }
 
 === Command Query Separation
 
-* A method either changes state (command) or returns a value (query) — not both
+* A method either changes the state (command) or returns a value (query) — not both
 * Mixing the two makes behavior hard to predict and test
 
 === Small Functions, Large Programs
