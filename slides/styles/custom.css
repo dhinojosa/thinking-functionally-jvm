@@ -34,6 +34,21 @@ section:has(div.slide-content div.quoteblock) {
 
 .slide-content {
     margin-left: 20px;
+    text-align: left;
+    align-self: flex-start;
+    width: calc(100% - 20px);
+    box-sizing: border-box;
+}
+
+section:not(.chapter):not(.title) ul,
+section:not(.chapter):not(.title) ol {
+    display: block;
+    text-align: left;
+    margin-left: 1.5em;
+}
+
+section:not(.chapter):not(.title) li > p {
+    text-align: left;
 }
 div.attribution {
     order: 2;
