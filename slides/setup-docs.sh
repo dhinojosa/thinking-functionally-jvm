@@ -7,6 +7,14 @@ cd "$(dirname "$0")"
 basename=$(basename "$PWD")
 image="asciidoctor/docker-asciidoctor"
 revealjsdir="https://cdn.jsdelivr.net/npm/reveal.js"
+run_decktape=false
+
+for arg in "$@"; do
+  case "$arg" in
+    --decktape) run_decktape=true ;;
+    *) echo "Unknown option: $arg"; exit 1 ;;
+  esac
+done
 
 docker run --rm \
   -v "$PWD":/documents \
@@ -26,11 +34,13 @@ docker run --rm \
     -o lab_book.html \
     lab_book.adoc
 
-docker run --rm \
-  -v "$PWD":/slides \
-  astefanutti/decktape \
-  --size '1920x1080' \
-  --pause 1000 \
-  reveal \
-  "file:///slides/${basename}.html" \
-  "/slides/${basename}.pdf"
+if $run_decktape; then
+  docker run --rm \
+    -v "$PWD":/slides \
+    astefanutti/decktape \
+    --size '1920x1080' \
+    --pause 1000 \
+    reveal \
+    "file:///slides/${basename}.html" \
+    "/slides/${basename}.pdf"
+fi
