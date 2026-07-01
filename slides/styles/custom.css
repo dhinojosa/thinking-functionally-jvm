@@ -121,6 +121,7 @@ p.author {
     line-height: 1.2;
     letter-spacing: normal;
     text-shadow: none;
+    text-transform: none;
     word-wrap: break-word;
 }
 
