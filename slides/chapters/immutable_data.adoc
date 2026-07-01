@@ -19,13 +19,55 @@ record Point(int x, int y) {}
 var p = new Point(1, 2);
 ----
 
+=== How Do You Update a Record?
+
+* Records are immutable — construct a new one with the changed value
++
+[source,java]
+----
+Point newLoc = new Point(oldLoc.x() * 2, oldLoc.y(), oldLoc.z());
+----
++
+* Add `with`-style methods to make it readable and chainable
++
+[source,java]
+----
+record Point(int x, int y, int z) {
+    Point withX(int x) { return new Point(x, y, z); }
+    Point withY(int y) { return new Point(x, y, z); }
+    Point withZ(int z) { return new Point(x, y, z); }
+}
+----
++
+[source,java]
+----
+Point newLoc  = oldLoc.withX(oldLoc.x() * 2);
+Point nextLoc = newLoc.withY(newLoc.y() * 2)
+                      .withZ(newLoc.z() * 2);
+----
+
+=== Derived Record Creation (Preview)
+
+* JEP 468 proposes `with` expressions, the compiler generates the copy constructors for you
+* No more handwritten `withX` / `withY` boilerplate
++
+[source,java]
+.JEP 468 preview syntax
+----
+Point newLoc  = oldLoc with { x = oldLoc.x() * 2; }
+Point nextLoc = newLoc with { y *= 2; z *= 2; }
+----
++
+* Targeted for preview in a future JDK release — https://openjdk.org/jeps/468[JEP 468]
+
 === Value Objects and Project Valhalla
 
 * Project Valhalla introduces value types — flat, identity-free, no heap overhead
-* Designed for small immutable data that is currently boxed as objects
-
+* Designed for small immutable data that are currently `boxed` as objects
+* Here is an example of `Money` as a Valhalla `value` object, expected to be in preview in JDK 27
++
 [source,java]
 ----
-// Valhalla preview direction
+
 value class Money(long cents) {}
 ----
