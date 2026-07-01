@@ -219,19 +219,16 @@ div.admonitionblock > table {
 
 section.chapter.present > h2 {
     color: white;
-    text-shadow: 2px 2px 4px #808080;
     text-align: left;
 }
 
 section.title h1,
 section.title h2 {
     color: #fff;
-    text-shadow: 2px 2px 4px #000;
 }
 
 .author {
     color: #fff;
-    text-shadow: 2px 2px 4px #000;
 }
 
 /*Place the title up top*/
@@ -256,8 +253,6 @@ section:not(.chapter,.title) > h2 {
 
 section.chapter > h2 > code {
     color: white !important;
-    text-shadow: 2px 2px 4px black;
-!important;
 }
 
 .small {
