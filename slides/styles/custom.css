@@ -224,6 +224,19 @@ section.orange.background {
     font-size: .5em;
 }
 
+.reveal .colist {
+    font-size: 0.45em;
+    text-align: left;
+    align-self: flex-start;
+    width: auto;
+    margin-left: 1.5em;
+    margin-top: 0.25em;
+}
+
+.reveal .colist > table {
+    margin: 0;
+}
+
 .citationblock {
     font-size: .5em;
 }
