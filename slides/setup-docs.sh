@@ -25,3 +25,12 @@ docker run --rm \
     -b html5 \
     -o lab_book.html \
     lab_book.adoc
+
+docker run --rm \
+  -v "$PWD":/slides \
+  astefanutti/decktape \
+  --size '1920x1080' \
+  --pause 1000 \
+  reveal \
+  "file:///slides/${basename}.html" \
+  "/slides/${basename}.pdf"
