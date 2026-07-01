@@ -1,0 +1,40 @@
+ifndef::imagesdir[:imagesdir: ../images]
+[.chapter]
+== Effectful Programs
+image::iStock-1181695869.jpg[background, size=cover]
+
+=== What Is an Effect?
+
+* An effect is a description of a computation that interacts with the outside world
+* Effects are values — they describe what to do, not do it immediately
+
+=== `Future`
+
+* Starts running immediately — eager, and hard to reason about in composition
+* Error handling is callback-based and easy to accidentally drop
+
+=== `IO`
+
+* Describes a computation without executing it — lazy and composable
+* Nothing runs until you call the interpreter at the edge of the world
+
+[source,scala]
+----
+val program: IO[Unit] =
+  IO.println("Hello") >> IO.println("World")
+----
+
+=== `F[_]` — Abstract Effects
+
+* Write logic against `F[_]` — swap the runtime without changing the program
+* Enables testability, mock effects, and multiple backends
+
+=== Clocks and Time
+
+* Inject `Clock` as a dependency — never call `System.currentTimeMillis()` directly
+* Testable time: freeze instants, simulate the future, replay the past
+
+=== Programs vs. Values
+
+* A program is just a value until interpreted — it can be inspected, composed, retried
+* Separating description from execution is the foundation of effect systems

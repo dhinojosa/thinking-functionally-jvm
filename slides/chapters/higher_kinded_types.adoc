@@ -1,0 +1,24 @@
+ifndef::imagesdir[:imagesdir: ../images]
+[.chapter]
+== Higher-Kinded Types
+image::iStock-1181695869.jpg[background, size=cover]
+
+=== `F[A]`
+
+* A higher-kinded type takes another type as a parameter — `F[_]`
+* Write code that works for any container: `Option`, `List`, `Future`, `IO`
+
+[source,scala]
+----
+def fetchAll[F[_]: Monad](ids: List[Int]): F[List[User]]
+----
+
+=== Reusable Programs
+
+* Abstract over the effect type — swap `IO` for `Future` without changing logic
+* Test with the identity monad; deploy with a real effect system
+
+=== Java's Limitation
+
+* Java generics cannot express `F[_]` — only `F<A>` with a concrete `F`
+* Workarounds exist (Vavr, higher-kinded emulation) but are verbose and incomplete

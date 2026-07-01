@@ -1,0 +1,35 @@
+ifndef::imagesdir[:imagesdir: ../images]
+[.chapter]
+== Functional Design Principles
+image::iStock-1181695869.jpg[background, size=cover]
+
+=== Referential Transparency
+
+* Replace any function call with its return value and the program behaves the same
+* No hidden state, no side effects — the same input always yields the same output
+
+[source,java]
+----
+// Referentially transparent
+int add(int a, int b) { return a + b; }
+----
+
+=== Single Responsibility Principle
+
+* Each function does exactly one thing
+* Small, focused functions are easier to test, name, and compose
+
+=== Separate Side Effects
+
+* Push I/O and mutation to the edges of the program
+* Pure core logic stays testable when it doesn't touch the outside world
+
+=== Command Query Separation
+
+* A method either changes state (command) or returns a value (query) — not both
+* Mixing the two makes behavior hard to predict and test
+
+=== Small Functions, Large Programs
+
+* Complex behavior emerges from composing small, focused functions
+* The size of a program is no reason for individual functions to grow large

@@ -1,0 +1,55 @@
+ifndef::imagesdir[:imagesdir: ../images]
+[.chapter]
+== Functional Behaviors
+image::iStock-1181695869.jpg[background, size=cover]
+
+=== `map`
+
+* Applies a function to the value inside a container — the container shape is preserved
+* Works on `Optional`, `Stream`, `CompletableFuture`, and any `Functor`
+
+[source,java]
+----
+Optional.of("hello").map(String::toUpperCase);
+----
+
+=== `flatMap`
+
+* Like `map`, but the function returns a container — avoids nesting
+* The monadic pattern: `flatMap`, `flatMap`, ..., `map`
+
+[source,java]
+----
+findUser(id)
+    .flatMap(u -> findOrder(u.id()))
+    .flatMap(o -> findItem(o.itemId()))
+    .map(Item::name);
+----
+
+=== In-Channel Errors
+
+* `flatMap` short-circuits on `Empty` / `Left` / `Failure`
+* Error handling is structural — no explicit `if` checks needed
+
+=== With `Optional` and `CompletableFuture`
+
+* Both expose `flatMap` — the same pattern applies across contexts
+* `CompletableFuture.thenCompose` is `flatMap` for async computations
+
+=== `filter`
+
+* Drops values that don't satisfy a predicate; returns an empty container if none pass
+
+[source,java]
+----
+stream.filter(n -> n > 0)
+----
+
+=== `reduce`
+
+* Folds a collection into a single value using an identity and a combining function
+
+[source,java]
+----
+Stream.of(1, 2, 3).reduce(0, Integer::sum); // 6
+----

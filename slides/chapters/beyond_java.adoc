@@ -1,0 +1,25 @@
+ifndef::imagesdir[:imagesdir: ../images]
+[.chapter]
+== Beyond Java
+image::iStock-1181695869.jpg[background, size=cover]
+
+=== Scala
+
+* The most expressive JVM language for functional programming
+* Case classes, pattern matching, typeclasses, and higher-kinded types built in
+
+=== Cats Effect
+
+* A purely functional effect system for Scala
+* `IO`, fibers, `Resource`, and structured concurrency on solid FP foundations
+
+=== Arrow (Kotlin)
+
+* Brings functional patterns to Kotlin — `Either`, `Option`, optics, effects
+* Started "Cats-style," evolved toward idiomatic Kotlin ergonomics
+
+=== Direct Style vs. Functional Style
+
+* Direct style: reads like imperative code; effects tracked by the compiler or runtime
+* Functional style: effects are explicit values — composable, but more verbose
+* Both are valid; the trade-off is ergonomics vs. explicitness

@@ -1,0 +1,44 @@
+ifndef::imagesdir[:imagesdir: ../images]
+[.chapter]
+== Typeclasses
+image::iStock-1181695869.jpg[background, size=cover]
+
+=== What Is a Typeclass?
+
+* A typeclass defines a capability that a type can satisfy from the outside
+* Behavior is decoupled from data — open to extension without inheritance
+
+=== `Show`
+
+* Converts a value to a human-readable string
+* Defined outside the class — no coupling to the data type
+
+[source,scala]
+----
+given Show[User] = user => s"User(${user.name})"
+----
+
+=== `Eq`
+
+* Type-safe equality — can't accidentally compare incompatible types
+* Defined separately from `equals`; compiler enforces it
+
+=== `Order` and `Comparator`
+
+* `Order` is a typeclass for total ordering
+* Java's `Comparator` is the closest analog — explicit, not inherited
+
+[source,java]
+----
+Comparator<Money> byAmount = Comparator.comparingLong(Money::cents);
+----
+
+=== Java's Path to Typeclasses
+
+* Project Valhalla and future proposals explore interface-based capabilities
+* Data-oriented programming separates what data *is* from what it can *do*
+
+=== Separating Behavior from Data
+
+* Add new operations to existing types without touching them
+* Makes code open-closed at the data layer, not just the object layer

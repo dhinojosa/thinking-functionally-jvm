@@ -1,0 +1,38 @@
+ifndef::imagesdir[:imagesdir: ../images]
+[.chapter]
+== Java Thoughts and Patterns
+image::iStock-1181695869.jpg[background, size=cover]
+
+=== Object Behavior
+
+* `equals` and `hashCode` must be consistent — records handle this automatically
+* `Comparable` for natural order; `Comparator` for flexible, external ordering
+
+[source,java]
+----
+Comparator<Person> byAge = Comparator.comparing(Person::age);
+----
+
+=== Structured Concurrency
+
+* `StructuredTaskScope` runs subtasks in a structured tree — cancel on first failure
+* Composable concurrent work without manual thread wiring
+
+[source,java]
+----
+try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+    var a = scope.fork(() -> fetchA());
+    scope.join().throwIfFailed();
+}
+----
+
+=== Vavr Validation
+
+* Vavr's `Validation` accumulates all errors before returning — no early exit
+* Compose individual validators with `combine` into a single result
+
+=== Functional Operations Recap
+
+* `flatMap` — sequence dependent computations; short-circuits on failure
+* `map` — transform a value without unwrapping the container
+* `reduce` — collapse a collection into one value

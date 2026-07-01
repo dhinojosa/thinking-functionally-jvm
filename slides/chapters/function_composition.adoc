@@ -1,0 +1,41 @@
+ifndef::imagesdir[:imagesdir: ../images]
+[.chapter]
+== Function Composition
+image::iStock-1181695869.jpg[background, size=cover]
+
+=== Composing Functions
+
+* Composition wires the output of one function into the input of another
+* Build complex transformations from small, focused pieces — no new classes needed
+
+=== `andThen`
+
+* `f.andThen(g)` applies `f` first, then passes the result to `g`
+* Reads left to right — matches the direction data flows
+
+[source,java]
+----
+Function<String, String> trim  = String::trim;
+Function<String, String> upper = String::toUpperCase;
+Function<String, String> clean = trim.andThen(upper);
+----
+
+=== `compose`
+
+* `f.compose(g)` applies `g` first, then `f` — mathematical order
+* Useful when building from the outside in
+
+[source,java]
+----
+Function<String, String> clean = upper.compose(trim);
+----
+
+=== Method References
+
+* Method references reduce noise and make composition readable
+* `ClassName::method`, `instance::method`, or `ClassName::new`
+
+[source,java]
+----
+Function<String, Integer> parse = Integer::parseInt;
+----

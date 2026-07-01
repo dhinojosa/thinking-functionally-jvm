@@ -20,9 +20,37 @@ Daniel Hinojosa
 :experimental:
 :revealjs_theme: white
 
-[.chapter]
-== Section 1
-image::iStock-1075835580.jpg[background, size=cover]
+include::chapters/reproducible_development_environments.adoc[]
 
-include::chapters/chapter1.adoc[]
+include::chapters/functional_java.adoc[]
+
+include::chapters/functional_design_principles.adoc[]
+
+include::chapters/immutable_data.adoc[]
+
+include::chapters/streams_and_laziness.adoc[]
+
+include::chapters/function_composition.adoc[]
+
+include::chapters/algebraic_data_types.adoc[]
+
+include::chapters/errors_as_data.adoc[]
+
+include::chapters/functional_behaviors.adoc[]
+
+include::chapters/java_thoughts_and_patterns.adoc[]
+
+include::chapters/about_scala.adoc[]
+
+include::chapters/typeclasses.adoc[]
+
+include::chapters/functional_abstraction_typeclasses.adoc[]
+
+include::chapters/higher_kinded_types.adoc[]
+
+include::chapters/effectful_programs.adoc[]
+
+include::chapters/programs_and_interpreters.adoc[]
+
+include::chapters/beyond_java.adoc[]
 

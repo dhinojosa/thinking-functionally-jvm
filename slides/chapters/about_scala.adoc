@@ -1,0 +1,24 @@
+ifndef::imagesdir[:imagesdir: ../images]
+[.chapter]
+== About Scala
+image::iStock-1181695869.jpg[background, size=cover]
+
+=== Scala on the JVM
+
+* Runs on the JVM and interoperates freely with Java libraries
+* Statically typed with a substantially richer type system than Java
+
+=== What Scala Adds
+
+* Case classes, pattern matching, and first-class functions are built in
+* Higher-kinded types and typeclasses without library workarounds
+
+=== When to Consider Scala
+
+* When the Java type system cannot express your domain clearly
+* Cats Effect and other effect systems offer effect systems Java cannot replicate natively
+
+=== The Trade-off
+
+* Greater expressiveness comes with a steeper learning curve
+* Team familiarity and hiring pool matter as much as language power

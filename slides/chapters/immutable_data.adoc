@@ -1,0 +1,31 @@
+ifndef::imagesdir[:imagesdir: ../images]
+[.chapter]
+== Immutable Data
+image::iStock-1181695869.jpg[background, size=cover]
+
+=== Why Immutability?
+
+* Immutable values cannot change after creation — no mutation surprises
+* Thread-safe by default; safe to share, cache, and pass freely
+
+=== Records
+
+* Java `record` declares immutable data with minimal boilerplate
+* Compiler generates constructor, accessors, `equals`, `hashCode`, and `toString`
+
+[source,java]
+----
+record Point(int x, int y) {}
+var p = new Point(1, 2);
+----
+
+=== Value Objects and Project Valhalla
+
+* Project Valhalla introduces value types — flat, identity-free, no heap overhead
+* Designed for small immutable data that is currently boxed as objects
+
+[source,java]
+----
+// Valhalla preview direction
+value class Money(long cents) {}
+----

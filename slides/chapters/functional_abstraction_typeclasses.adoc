@@ -1,0 +1,48 @@
+ifndef::imagesdir[:imagesdir: ../images]
+[.chapter]
+== Functional Abstraction Typeclasses
+image::iStock-1181695869.jpg[background, size=cover]
+
+=== `Monoid`
+
+* A type with a binary `combine` operation and an identity (zero) element
+* Strings, lists, and integers under addition are all monoids
+
+[source,java]
+----
+// identity + combine
+"" + "hello" == "hello"
+----
+
+=== `Functor`
+
+* Any type that supports `map` over its contents while preserving structure
+* Laws: mapping the identity function changes nothing; composition holds
+
+=== `Applicative`
+
+* Applies a wrapped function to a wrapped value — `F[A => B]` to `F[A]`
+* Enables independent effects to run without sequencing
+
+=== `Monad`
+
+* A `Functor` with `flatMap` — chains dependent computations
+* For-comprehensions in Scala desugar to nested `flatMap` calls
+
+[source,scala]
+----
+for {
+  user  <- findUser(id)
+  order <- findOrder(user.id)
+} yield order
+----
+
+=== In-Channel Errors
+
+* Monadic `flatMap` short-circuits on the first failure
+* Use `Applicative` when all errors should accumulate instead
+
+=== `Traverse`
+
+* Flips a collection of effects into an effect of a collection
+* `List[Future[T]]` → `Future[List[T]]` — sequence without manual loops

@@ -1,0 +1,43 @@
+ifndef::imagesdir[:imagesdir: ../images]
+[.chapter]
+== Reproducible Development Environments
+image::iStock-1181695869.jpg[background, size=cover]
+
+=== The Problem
+
+* "Works on my machine" is a team liability
+* Reproducibility means the same tools and versions everywhere — no drift
+
+=== Nix
+
+* Declarative package manager — every dependency is pinned and hashed
+* Defines a deterministic toolchain per project via a shell derivation
+
+[source,nix]
+----
+{ pkgs ? import <nixpkgs> {} }:
+pkgs.mkShell {
+  buildInputs = [ pkgs.jdk21 ];
+}
+----
+
+=== Docker / Dev Containers
+
+* Containerized environment defined as code — ships with the repo
+* VS Code Dev Containers bring the environment directly into the editor
+
+[source,yaml]
+----
+FROM eclipse-temurin:21-jdk
+WORKDIR /workspace
+----
+
+=== SDKMan
+
+* Lightweight JVM version switcher — no containers required
+* Pin a project's Java version with `.sdkmanrc`
+
+[source,bash]
+----
+sdk use java 21.0.2-tem
+----

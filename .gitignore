@@ -26,3 +26,6 @@ out/
 build/
 .kotlin/
 local.properties
+
+
+slides/*.html

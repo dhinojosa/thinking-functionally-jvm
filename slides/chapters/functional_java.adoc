@@ -1,0 +1,49 @@
+ifndef::imagesdir[:imagesdir: ../images]
+[.chapter]
+== Functional Java
+image::iStock-1181695869.jpg[background, size=cover]
+
+=== Java's Functional Toolkit
+
+* `java.util.function` ships `Function`, `Predicate`, `Supplier`, and `Consumer`
+* These are the building blocks for functional-style code — no third-party libs needed
+
+=== `Function<T, R>`
+
+* Transforms a value of type `T` into a value of type `R`
+* Compose pipelines with `andThen` and `compose`
+
+[source,java]
+----
+Function<String, Integer> length = String::length;
+----
+
+=== `Predicate<T>`
+
+* Tests a condition — returns `true` or `false`
+* Combine predicates with `and`, `or`, `negate`
+
+[source,java]
+----
+Predicate<String> notEmpty = s -> !s.isEmpty();
+----
+
+=== `Supplier<T>`
+
+* Produces a value lazily — no input, one output
+* Useful for deferred or optional computation
+
+[source,java]
+----
+Supplier<List<String>> fresh = ArrayList::new;
+----
+
+=== `Consumer<T>`
+
+* Performs a side effect on a value — no return
+* Use for logging, printing, or persisting
+
+[source,java]
+----
+Consumer<String> print = System.out::println;
+----

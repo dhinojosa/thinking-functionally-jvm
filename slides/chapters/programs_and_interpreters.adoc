@@ -1,0 +1,34 @@
+ifndef::imagesdir[:imagesdir: ../images]
+[.chapter]
+== Programs and Interpreters
+image::iStock-1181695869.jpg[background, size=cover]
+
+=== Data
+
+* Programs are described as data — sealed types, case classes, records
+* The data layer carries no side effects; it only says what should happen
+
+=== Algebra
+
+* An algebra defines the vocabulary of operations for a domain
+* Expressed as a sealed type hierarchy or a typeclass interface
+
+=== Programs
+
+* A program chains algebra terms together — it is just a value
+* Programs compose freely; raw instructions do not
+
+=== Interpreters
+
+* An interpreter walks program data and performs the real effects
+* Swap interpreters to change behavior: production vs. test, SQL vs. in-memory
+
+=== Why Effects Exist
+
+* Effects isolate impurity at the boundary — the rest of the program stays pure
+* Push I/O to the edges; keep the business logic functional and testable
+
+=== A Note on `@Transactional`
+
+* `@Transactional` hides a side effect behind an annotation — invisible in the type
+* Effect systems make transactions explicit, composable, and visible at every call site

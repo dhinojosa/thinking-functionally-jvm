@@ -1,0 +1,33 @@
+ifndef::imagesdir[:imagesdir: ../images]
+[.chapter]
+== Streams and Laziness
+image::iStock-1181695869.jpg[background, size=cover]
+
+=== Delayed Computation
+
+* Lazy evaluation defers work until the result is needed
+* Avoids computing things that may never be used
+
+=== Lazy vs. Eager Evaluation
+
+* Eager: evaluates immediately — collections, loops
+* Lazy: evaluates on demand — Java Streams, `Supplier`
+
+[source,java]
+----
+// Nothing executes yet
+Stream.of(1, 2, 3).filter(n -> n > 1);
+----
+
+=== Pipelines
+
+* Chain `filter`, `map`, `flatMap` into a single declarative pass
+* A terminal operation (`collect`, `findFirst`, `reduce`) triggers evaluation
+
+[source,java]
+----
+list.stream()
+    .filter(s -> !s.isEmpty())
+    .map(String::toUpperCase)
+    .collect(toList());
+----

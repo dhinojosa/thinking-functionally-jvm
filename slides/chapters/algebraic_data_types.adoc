@@ -1,0 +1,41 @@
+ifndef::imagesdir[:imagesdir: ../images]
+[.chapter]
+== Algebraic Data Types
+image::iStock-1181695869.jpg[background, size=cover]
+
+=== What Are ADTs?
+
+* A closed set of types — either a product (AND) or a sum (OR)
+* The type system enforces exhaustive handling; no case is silently ignored
+
+=== Commands
+
+* One sealed variant per action — no ambiguity about what is being requested
+* Pattern match to handle each command explicitly
+
+[source,java]
+----
+sealed interface Command
+    permits Deposit, Withdraw, Transfer {}
+----
+
+=== Results and Errors
+
+* Model success and failure as data — not exceptions
+* The return type signals what can go wrong
+
+[source,java]
+----
+sealed interface Result<T>
+    permits Success, Failure {}
+----
+
+=== Collections
+
+* A list is either empty or has a head and a tail — a sum type
+* Pattern match on structure the same way you match on domain types
+
+=== Language and the Interpreter Pattern
+
+* Define a vocabulary of operations as sealed types — a small language
+* Separate description from execution; an interpreter runs the program later
