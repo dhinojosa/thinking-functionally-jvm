@@ -3,10 +3,19 @@ ifndef::imagesdir[:imagesdir: ../images]
 == Beyond Java
 image::iStock-1181695869.jpg[background, size=cover]
 
+[.columns]
 === Scala
 
+[.column]
+--
 * The most expressive JVM language for functional programming
 * Case classes, pattern matching, typeclasses, and higher-kinded types built in
+--
+
+[.column]
+--
+image::scala.png[]
+--
 
 === Cats Effect
 
