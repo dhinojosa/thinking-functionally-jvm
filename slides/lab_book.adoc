@@ -21,4 +21,4 @@ Daniel Hinojosa
 :toc: left
 :experimental:
 
-include::labs/running_lab.adoc[]
+include::labs/composing_quote.adoc[]
