@@ -6,7 +6,7 @@ image::iStock-1181695869.jpg[background, size=cover]
 === `map`
 
 * Applies a function to the value inside a container — the container shape is preserved
-* Works on `Optional`, `Stream`, `CompletableFuture`, and any `Functor`
+* Works on `Optional`, `Stream`, `CompletableFuture`
 
 [source,java]
 ----
@@ -29,7 +29,26 @@ findUser(id)
 === In-Channel Errors
 
 * `flatMap` short-circuits on `Empty` / `Left` / `Failure`
-* Error handling is structural — no explicit `if` checks needed
+* Error handling is structural
+* No explicit `if` or `try`/`catch` checks needed
++
+[source,java]
+.The following will return `Option(6)`
+----
+var o1 = Optional.of(2);
+var o2 = Optional.of(4);
+var result = o1.flatMap(x -> o2.map(y -> x + y));
+----
++
+* Here is where the short-circuit will happen
++
+[source,java]
+.The following will return `Option.empty`
+----
+var o1 = Optional.of(2);
+var o2 = Optional.<Integer>empty();
+var result = o1.flatMap(x -> o2.map(y -> x + y));
+----
 
 === With `Optional` and `CompletableFuture`
 
