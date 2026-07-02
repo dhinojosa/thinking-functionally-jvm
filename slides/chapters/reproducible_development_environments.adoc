@@ -7,12 +7,29 @@ image::iStock-1181695869.jpg[background, size=cover]
 
 * "Works on my machine" is a team liability
 * Reproducibility means the same tools and versions everywhere — no drift
+* Some Java Tools come to mind
+** Nix
+** Docker
+** DevContainers
 
+[.columns]
 === Nix
 
-* Declarative package manager — every dependency is pinned and hashed
-* Defines a deterministic toolchain per project via a shell derivation
+[.column]
+--
+* Nix is a powerful package manager and build system, known for its unique approach to package and configuration management.
+* It’s primarily used in Unix-like systems and has several distinctive features:
+* *Functional Package Management*
+* Reliable and Reproducible
+* Isolated Environments
+--
 
+[.column]
+--
+* Rollbacks and Atomic Upgrades
+* Declarative Configuration
+* Multi-user Profiles
++
 [source,nix]
 ----
 { pkgs ? import <nixpkgs> {} }:
@@ -20,24 +37,55 @@ pkgs.mkShell {
   buildInputs = [ pkgs.jdk21 ];
 }
 ----
+--
 
-=== Docker / Dev Containers
+[.columns]
+=== Docker
 
-* Containerized environment defined as code — ships with the repo
-* VS Code Dev Containers bring the environment directly into the editor
+[.column]
+--
+* Lightweight containerization platform
+* Packages applications with all dependencies
+* Runs isolated environments using OS-level virtualization
+* Uses layered images built from Dockerfiles
+* Widely used for reproducible builds and deployments
+--
 
-[source,yaml]
+[.column]
+--
+[source, docker]
 ----
-FROM eclipse-temurin:21-jdk
-WORKDIR /workspace
+FROM openjdk:21
+WORKDIR /app
+CMD javac HelloWorld.java &&
+    java HelloWorld
 ----
+--
+
+=== Dev Containers
+
+* Lightweight containerization platform
+* Packages applications with all dependencies
+* Runs isolated environments using OS-level virtualization
+* Uses layered images built from Dockerfiles
+* Widely used for reproducible builds and deployments
+
+[.notitle]
+=== SDKMan Intro
+
+image::sdkman.png[]
 
 === SDKMan
 
 * Lightweight JVM version switcher — no containers required
-* Pin a project's Java version with `.sdkmanrc`
-
-[source,bash]
+** `sdk list` - List all Tools
+** `sdk list java` - List all Java Version and their identifiers
+** `sdk install java <identifier>` - Install a Specific Java
+** `sdk use java <identifier>` - Use a specific Java that has already been installed
+* Pin a project's Java version with `.sdkmanrc` in your project, then run `sdk install`
++
+[source]
 ----
-sdk use java 21.0.2-tem
+java=21.0.2-tem
+maven=3.9.6
 ----
