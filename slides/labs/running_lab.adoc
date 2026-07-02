@@ -1,6 +1,0 @@
-ifndef::imagesdir[:imagesdir: ../images]
-== Running a Lab
-
-* Do this, do that
-
-image::stop.png[width=10%, height=10%, align=center]
