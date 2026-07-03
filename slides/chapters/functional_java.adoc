@@ -15,7 +15,8 @@ image::iStock-1181695869.jpg[background, size=cover]
 
 [source,java]
 ----
-Function<String, Integer> length = String::length;
+Function<String, Integer> length =
+    value -> value.length();
 ----
 
 === `Predicate<T>`
@@ -35,7 +36,8 @@ Predicate<String> notEmpty = s -> !s.isEmpty();
 
 [source,java]
 ----
-Supplier<List<String>> fresh = ArrayList::new;
+Supplier<List<String>> fresh =
+    () -> new ArrayList<>();
 ----
 
 === `Consumer<T>`
@@ -45,5 +47,99 @@ Supplier<List<String>> fresh = ArrayList::new;
 
 [source,java]
 ----
-Consumer<String> print = System.out::println;
+Consumer<String> print =
+    value -> System.out.println(value);
+----
+
+=== Method References
+
+* A method reference is a shorter lambda
+* Use it when the lambda only calls one existing method or constructor
+
+[source,java]
+----
+Function<String, Integer> length =
+    value -> value.length();
+
+Function<String, Integer> same =
+    String::length;
+----
+
+=== Constructor References
+
+* `ArrayList::new` means "call the `ArrayList` constructor"
+* The functional interface decides the shape: no arguments, one result
+
+[source,java]
+----
+Supplier<List<String>> fresh =
+    () -> new ArrayList<>();
+
+Supplier<List<String>> same =
+    ArrayList::new;
+----
+
+=== Static Method References
+
+* `ClassName::method` calls a static method
+* The lambda arguments become the method arguments
+
+[source,java]
+----
+Function<String, Integer> parse =
+    value -> Integer.parseInt(value);
+
+Function<String, Integer> same =
+    Integer::parseInt;
+----
+
+=== Instance Method References
+
+* `instance::method` calls a method on a specific object
+* The lambda argument is passed to that object
+
+[source,java]
+----
+Consumer<String> print =
+    value -> System.out.println(value);
+
+Consumer<String> same =
+    System.out::println;
+----
+
+=== Method Reference Forms
+
+[cols="1,2,2", options="header"]
+|===
+| Form | Reads As | Lambda Shape
+
+| `ClassName::staticMethod`
+| call a static method
+| `x -> ClassName.staticMethod(x)`
+
+| `instance::method`
+| call a method on this object
+| `x -> instance.method(x)`
+
+| `ClassName::instanceMethod`
+| call a method on the input object
+| `x -> x.instanceMethod()`
+
+| `ClassName::new`
+| call a constructor
+| `() -> new ClassName()`
+|===
+
+=== Use the Clearest Form
+
+* Lambdas make the inputs visible
+* Method references remove noise once the shape is clear
+
+[source,java]
+----
+Predicate<String> notEmpty =
+    value -> !value.isEmpty();
+
+Function<String, String> trim =
+    String::trim;
 ----

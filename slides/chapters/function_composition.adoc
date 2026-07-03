@@ -29,13 +29,3 @@ Function<String, String> clean = trim.andThen(upper);
 ----
 Function<String, String> clean = upper.compose(trim);
 ----
-
-=== Method References
-
-* Method references reduce noise and make composition readable
-* `ClassName::method`, `instance::method`, or `ClassName::new`
-
-[source,java]
-----
-Function<String, Integer> parse = Integer::parseInt;
-----
