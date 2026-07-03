@@ -133,9 +133,9 @@ Edit whatever you want in the `.adoc` files. The main slide deck starts at
 
 You can make small edits, large edits, or turn the material into your own
 workshop. Change the chapters, labs, examples, title, author name, or anything
-else you need. If you want to do more substantial customization, learn the
+else you need. If you want to do more significant customization, learn the
 basics of Asciidoctor and Asciidoctor Reveal.js. The source files are
-intentionally plain text so the workshop can be changed without presentation
+intentionally plain text, so the workshop can be changed without presentation
 software.
 
 Render the slides and lab book with:
