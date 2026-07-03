@@ -53,7 +53,7 @@ pkgs.mkShell {
 
 [.column]
 --
-[source, docker]
+[source,dockerfile]
 ----
 FROM openjdk:21
 WORKDIR /app
@@ -84,7 +84,7 @@ image::sdkman.png[]
 ** `sdk use java <identifier>` — Use a specific Java that has already been installed
 * Pin a project's Java version with `.sdkmanrc` in your project, then run `sdk install`
 +
-[source]
+[source,properties]
 ----
 java=21.0.2-tem
 maven=3.9.6

@@ -16,7 +16,7 @@ Daniel Hinojosa
 :revealjs_hash: true
 :source-highlighter: highlightjs
 :highlightjs-theme: training-styles/color-brewer.css
-:highlightjs-languages: docker, java, nix, yaml, toml, json, gherkin, scala, kotlin
+:highlightjs-languages: dockerfile, java, nix, yaml, toml, json, gherkin, scala, kotlin, properties
 :experimental:
 :revealjs_theme: white
 
@@ -53,4 +53,3 @@ include::chapters/effectful_programs.adoc[]
 include::chapters/programs_and_interpreters.adoc[]
 
 include::chapters/beyond_java.adoc[]
-
