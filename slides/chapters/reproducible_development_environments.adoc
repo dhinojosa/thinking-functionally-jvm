@@ -79,9 +79,9 @@ image::sdkman.png[]
 
 * Lightweight JVM version switcher — no containers required
 ** `sdk list` - List all Tools
-** `sdk list java` - List all Java Version and their identifiers
-** `sdk install java <identifier>` - Install a Specific Java
-** `sdk use java <identifier>` - Use a specific Java that has already been installed
+** `sdk list java` — List all Java Versions and their identifiers
+** `sdk install java <identifier>` — Install a Specific Java
+** `sdk use java <identifier>` — Use a specific Java that has already been installed
 * Pin a project's Java version with `.sdkmanrc` in your project, then run `sdk install`
 +
 [source]
