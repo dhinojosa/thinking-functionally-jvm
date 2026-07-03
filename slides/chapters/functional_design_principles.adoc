@@ -17,7 +17,6 @@ int add(int a, int b) { return a + b; }
 +
 [source,java]
 ----
-// Side effect: printing makes this irreplaceable
 int addAndPrint(int a, int b) {
     int result = a + b;
     System.out.println(result); // IO changes the world
@@ -138,17 +137,17 @@ void printTotal(Money total) {
 * If a method needs today's date, make the dependency explicit
 * `Supplier<LocalDate>` keeps time replaceable in tests
 +
-[source,java]
+[source,java,subs="+quotes"]
 ----
 class InvoiceService {
     private final Supplier<LocalDate> today;
 
-    protected InvoiceService(Supplier<LocalDate> today) {
+    [green]#protected InvoiceService(Supplier<LocalDate> today)# {
         this.today = today;
     }
 
     static InvoiceService of() {
-        return new InvoiceService(() -> LocalDate.now());
+        [green]#return new InvoiceService(() -> LocalDate.now());#
     }
 
     Money totalFor(Invoice invoice) {
