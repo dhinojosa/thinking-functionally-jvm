@@ -56,7 +56,7 @@ db.save(data.activate());
 === What Is a Side Effect?
 
 * A side effect is any observable interaction beyond returning a value
-* The method changes the world, reads from the world, or depends on hidden state
+* The method changes the world, reads from the world, or depends on a hidden state
 * The following shows no side effect:
 +
 [source,java]
