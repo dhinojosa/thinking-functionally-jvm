@@ -37,5 +37,18 @@ sealed interface Result<T>
 
 === Language and the Interpreter Pattern
 
-* Define a vocabulary of operations as sealed types — a small language
+* Define vocabulary of operations as sealed types — a small language
 * Separate description from execution; an interpreter runs the program later
+
+[.columns]
+=== Demo: Sealed Types and Interpreters in Java
+
+[.column]
+--
+image::legolab.jpg[]
+--
+
+[.column]
+--
+Let's view some examples of `sealed` types and how they are interpreted in Java.
+--
