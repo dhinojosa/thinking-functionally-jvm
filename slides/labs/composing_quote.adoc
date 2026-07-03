@@ -1,6 +1,6 @@
 == Lab 1: Building a Customer Quote
 
-. Look for the domain models in `com.evolutionext.domain`
+. Look for the domain models in `com.evolutionnext.domain`
 .. `CustomerId`
 .. `Customer`
 .. `Order`
@@ -8,7 +8,7 @@
 .. `Quote`
 .. `OrderId`
 .. `Dollars`
-. Look for the supporting services in `com.evolutionnext.services`
+. Look for the supporting services in `com.evolutionnext.service`
 .. `CustomerService`
 .. `OrderService`
 .. `DiscountService`
