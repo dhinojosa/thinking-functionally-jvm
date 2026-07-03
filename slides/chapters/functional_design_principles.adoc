@@ -53,10 +53,109 @@ var valid  = validate(data);
 db.save(data.activate());
 ----
 
+=== What Is a Side Effect?
+
+* A side effect is any observable interaction beyond returning a value
+* The method changes the world, reads from the world, or depends on hidden state
+* The following shows no side effect:
++
+[source,java]
+----
+int add(int a, int b) {
+    return a + b;
+}
+----
+* Here is an example of printing to the screen, which is a side effect:
++
+[source,java]
+----
+int addAndPrint(int a, int b) {
+    int result = a + b;
+    System.out.println(result);
+    return result;
+}
+----
+
+=== Common Java Side Effects
+
+[cols="1,2", options="header"]
+|===
+| Side Effect | Example
+
+| Console I/O
+| `System.out.println(value)`
+
+| Updating state
+| `this.total += amount`
+
+| Files and databases
+| `Files.write(...)`, `repository.save(...)`
+
+| Network calls
+| `httpClient.send(request, handler)`
+
+| Time
+| `LocalDate.now()`, `Instant.now()`
+
+| Randomness
+| `UUID.randomUUID()`, `Random.nextInt()`
+
+| Exceptions
+| `throw new IllegalStateException(...)`
+|===
+
 === Separate Side Effects
 
 * Push I/O and mutation to the edges of the program
 * Pure core logic stays testable when it doesn't touch the outside world
++
+Before:
++
+[source,java]
+----
+void printInvoice(Invoice invoice) {
+    LocalDate today = LocalDate.now();
+    Money total = invoice.totalFor(today);
+    System.out.println(total);
+}
+----
++
+After:
++
+[source,java]
+----
+Money totalFor(Invoice invoice, LocalDate today) {
+    return invoice.totalFor(today);
+}
+
+void printTotal(Money total) {
+    System.out.println(total);
+}
+----
+
+=== Separate Side Effects: Inject Time
+
+* If a method needs today's date, make the dependency explicit
+* `Supplier<LocalDate>` keeps time replaceable in tests
++
+[source,java]
+----
+class InvoiceService {
+    private final Supplier<LocalDate> today;
+
+    protected InvoiceService(Supplier<LocalDate> today) {
+        this.today = today;
+    }
+
+    static InvoiceService of() {
+        return new InvoiceService(() -> LocalDate.now());
+    }
+
+    Money totalFor(Invoice invoice) {
+        return invoice.totalFor(today.get());
+    }
+}
+----
 
 === Command Query Separation
 
