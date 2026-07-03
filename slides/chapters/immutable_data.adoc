@@ -57,8 +57,61 @@ Point nextLoc = newLoc.withY(newLoc.y() * 2)
 Point newLoc  = oldLoc with { x = oldLoc.x() * 2; }
 Point nextLoc = newLoc with { y *= 2; z *= 2; }
 ----
+
+[NOTE]
+====
+Targeted for preview in a future JDK release — https://openjdk.org/jeps/468[JEP 468]
+====
+
+=== Value Objects
+
+* A value object represents a domain value, not an object identity
+* Equality is based on its contents: `Money.of(100)` equals another `Money.of(100)`
+* Good value objects make invalid or confusing code harder to write
+
+=== Primitive Values Lose Meaning
+
+* `double` tells us the shape, not the meaning
+* The compiler cannot tell kilowatts from megawatt-hours
 +
-* Targeted for preview in a future JDK release — https://openjdk.org/jeps/468[JEP 468]
+[source,java]
+----
+double loadKw = 1.2;
+double energyMwh = 24.2;
+
+double sumKw = loadKw + energyMwh;
+----
++
+* The code compiles, but the math is nonsense
+
+=== Value Objects Keep Meaning
+
+* The type system carries the domain meaning
+* The compiler recognizes mistakes before production does
++
+[source,java]
+----
+record Power(double kilowatts) {
+    Power plus(Power other) {
+        return new Power(kilowatts + other.kilowatts);
+    }
+}
+
+record Energy(double megawattHours) {}
+
+Power load = new Power(1.2);
+Energy energy = new Energy(24.2);
+
+Power sum = load.plus(energy);
+----
++
+* The last line does not compile: `Energy` is not `Power`
+
+=== Prefer Value Objects
+
+* Lower cognitive load: names and types explain what the value is
+* Better design: illegal combinations do not look like ordinary math
+* Easier refactoring: behavior can move next to the value it protects
 
 === Value Objects and Project Valhalla
 
@@ -71,3 +124,8 @@ Point nextLoc = newLoc with { y *= 2; z *= 2; }
 
 value class Money(long cents) {}
 ----
+
+[NOTE]
+====
+https://openjdk.org/jeps/401[JEP 401,] which bring value objects to Java, is now listed as a preview feature.
+====
