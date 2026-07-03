@@ -114,3 +114,45 @@ In Thinking Functionally in Java, we explore how far disciplined functional desi
     * Cats Effect
     * Arrow (Cat Style to its own style)
     * The “Direct Style” vs. “Functional Style” discussion
+
+## Editing and Rendering Slides
+
+The slides and lab book are written in Asciidoctor. The slide deck uses
+Asciidoctor Reveal.js.
+
+Make sure Docker is installed and running, then change into the `slides`
+directory:
+
+```bash
+cd slides
+```
+
+Edit whatever you want in the `.adoc` files. The main slide deck starts at
+`main.adoc`, and chapter files live under `chapters/`. The lab book starts at
+`lab_book.adoc`, with labs under `labs/`.
+
+You can make small edits, large edits, or turn the material into your own
+workshop. Change the chapters, labs, examples, title, author name, or anything
+else you need. If you want to do more substantial customization, learn the
+basics of Asciidoctor and Asciidoctor Reveal.js. The source files are
+intentionally plain text so the workshop can be changed without presentation
+software.
+
+Render the slides and lab book with:
+
+```bash
+./setup-docs.sh
+```
+
+Render the slides, lab book, and a PDF copy of the slides with:
+
+```bash
+./setup-docs.sh --decktape
+```
+
+## Made with AI, not by AI
+
+This workshop was created with help from AI tools, including ChatGPT + Codex
+and Claude + Claude Code. The material was developed through heavy guidance,
+review, and iteration to keep the examples, explanations, and technical details
+accurate.
