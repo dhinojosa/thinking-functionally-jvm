@@ -162,6 +162,73 @@ class InvoiceService {
 * A method either changes the state (command) or returns a value (query) — not both
 * Mixing the two makes behavior hard to predict and test
 
+=== Command and Query Mixed
+
+* This method changes state and returns a value
+* The caller has to know that asking for the result also mutates the object
++
+[source,java]
+----
+class Cart {
+    private final List<Item> items = new ArrayList<>();
+
+    Money addItem(Item item) {
+        items.add(item);
+        return total();
+    }
+
+    Money total() {
+        return items.stream()
+            .map(Item::price)
+            .reduce(Money.ZERO, Money::add);
+    }
+}
+----
+
+=== Command and Query Separated
+
+* Command: `addItem` has one purpose — change the cart
+* Query: `total()` has one job — calculate and return the total
++
+[source,java]
+----
+class Cart {
+    private final List<Item> items = new ArrayList<>();
+
+    void addItem(Item item) {
+        items.add(item);
+    }
+
+    Money total() {
+        return items.stream()
+            .map(Item::price)
+            .reduce(Money.ZERO, Money::add);
+    }
+}
+----
+
+=== Functional Method Shape
+
+* Prefer explicit inputs and meaningful return values
+* A small method either returns a plain value or a value in a context
++
+[source,java]
+----
+Account mergeBalances(Account left, Account right) {
+    return left.withBalance(
+        left.balance().add(right.balance())
+    );
+}
+
+Optional<Account> findAccount(AccountId id) {
+    return repository.findById(id);
+}
+----
++
+* The return type tells the caller what kind of result to expect
+* `Account` means "you get an account"
+* `Optional<Account>` means "maybe"
+
 === Small Functions, Large Programs
 
 * Complex behavior emerges from composing small, focused functions
