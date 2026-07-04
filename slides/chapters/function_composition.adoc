@@ -6,26 +6,77 @@ image::iStock-1181695869.jpg[background, size=cover]
 === Composing Functions
 
 * Composition wires the output of one function into the input of another
-* Build complex transformations from small, focused pieces — no new classes needed
+* Build complex transformations from small, focused pieces
+* No new classes are required
 
 === `andThen`
 
 * `f.andThen(g)` applies `f` first, then passes the result to `g`
 * Reads left to right — matches the direction data flows
-
++
 [source,java]
 ----
 Function<String, String> trim  = String::trim;
 Function<String, String> upper = String::toUpperCase;
 Function<String, String> clean = trim.andThen(upper);
 ----
++
+* Running `clean` will return `"HELLO"`
++
+[source,java]
+----
+clean.apply("Hello    ");
+----
+
+=== `andThen` with Mixed Types
+
+* The output type of one function must match the input type of the next
+* `String -> String -> Integer -> Integer`
++
+[source,java]
+----
+Function<String, String> trim =
+    String::trim;
+
+Function<String, Integer> parseInt =
+    Integer::parseInt;
+
+Function<Integer, Integer> mult3 =
+    n -> n * 3;
+
+Function<String, Integer> pipeline =
+    trim.andThen(parseInt).andThen(mult3);
+----
++
+* Applying the function will provide `42`
++
+[source,java]
+----
+pipeline.apply("  14  ");
+----
 
 === `compose`
 
-* `f.compose(g)` applies `g` first, then `f` — mathematical order
-* Useful when building from the outside in
-
+* `compose` chains functions in mathematical order
+* `f.compose(g)` applies `g` first, then `f`
++
+stem:[y = f(g(x))]
++
+* Given three functions, `f`, `g`, and `h`
++
+stem:[y = f(g(h(x)))]
++
+* Useful when building from the outside in, therefore using our `andThen` example with `compose` it will look like the following:
++
 [source,java]
 ----
-Function<String, String> clean = upper.compose(trim);
+Function<String, Integer> pipeline =
+    mult3.compose(parseInt).compose(trim);
+----
++
+* Applying the function will provide `42`
++
+[source,java]
+----
+pipeline.apply("  14  ");
 ----

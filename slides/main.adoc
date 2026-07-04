@@ -18,6 +18,7 @@ Daniel Hinojosa
 :highlightjs-theme: training-styles/color-brewer.css
 :highlightjs-languages: dockerfile, java, nix, yaml, toml, json, gherkin, scala, kotlin, properties
 :experimental:
+:stem: latexmath
 :revealjs_theme: white
 
 include::chapters/reproducible_development_environments.adoc[]
