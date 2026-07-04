@@ -33,7 +33,7 @@ findUser(id)
 * No explicit `if` or `try`/`catch` checks needed
 +
 [source,java]
-.The following will return `Option(6)`
+.The following will return `Optional.of(6)`
 ----
 var o1 = Optional.of(2);
 var o2 = Optional.of(4);
@@ -43,16 +43,16 @@ var result = o1.flatMap(x -> o2.map(y -> x + y));
 * Here is where the short-circuit will happen
 +
 [source,java]
-.The following will return `Option.empty`
+.The following will return `Optional.empty()`
 ----
 var o1 = Optional.of(2);
 var o2 = Optional.<Integer>empty();
 var result = o1.flatMap(x -> o2.map(y -> x + y));
 ----
 
-=== With `Optional` and `CompletableFuture`
+=== With `Optional`, `Stream` and `CompletableFuture`
 
-* Both expose `flatMap` — the same pattern applies across contexts
+* `Optional` and `Stream` both have `flatMap`
 * `CompletableFuture.thenCompose` is `flatMap` for async computations
 
 === `filter`
@@ -67,8 +67,57 @@ stream.filter(n -> n > 0)
 === `reduce`
 
 * Folds a collection into a single value using an identity and a combining function
+* The following will return a `6`
 
 [source,java]
 ----
-Stream.of(1, 2, 3).reduce(0, Integer::sum); // 6
+Stream.of(1, 2, 3).reduce(0, Integer::sum);
 ----
+
+=== When Short-Circuiting Is Wrong
+
+* `flatMap` stops at the first failure
+* Sometimes we want every check to run
+* Example: validation should report all problems at once
++
+[source,java]
+----
+Validated<Name> name =
+    validateName(input.name());
+
+Validated<Email> email =
+    validateEmail(input.email());
+
+Validated<Age> age =
+    validateAge(input.age());
+----
+
+=== A Validation Harness
+
+* A harness applies independent checks
+* Each check contributes success or errors
+* The final result keeps all collected errors
++
+[source,java]
+----
+Validated<Customer> result =
+    Validated.combine(name, email, age)
+        .map(Customer::new);
+----
++
+* This does not stop after `name` fails, `email` and `age` will still run.
+
+[.columns]
+=== Lab: Functional Behaviors
+
+[.column]
+--
+image::legolab.jpg[]
+--
+
+[.column]
+--
+We will run a few standard functional operations, you will create your own `Optional` chain. Next we will run a `CompletableFuture`. Finally, we will create our own `Validated` harness, so we can verify that all validations run.
+--
+
+

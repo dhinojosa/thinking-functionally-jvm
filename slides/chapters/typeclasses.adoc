@@ -33,7 +33,7 @@ given Show[User] = user => s"User(${user.name})"
 Comparator<Money> byAmount = Comparator.comparingLong(Money::cents);
 ----
 
-=== Java's Path to Typeclasses
+=== Java's Path to Type classes
 
 * Project Valhalla and future proposals explore interface-based capabilities
 * Data-oriented programming separates what data *is* from what it can *do*

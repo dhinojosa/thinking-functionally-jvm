@@ -8,10 +8,37 @@ image::iStock-1181695869.jpg[background, size=cover]
 * Exceptions break composition — they escape the normal return path
 * Callers can't tell from the signature that a method might fail
 
+=== Homemade `sealed` Results
+
+* In the previous demo, we used Algebraic Data Types to model results and errors.
++
+[source,java]
+.Creating a `sealed` `Result`
+----
+sealed interface OrderResult {
+    record Success(OrderId id) implements OrderResult {}
+    record Failure(OrderError error) implements OrderResult {}
+}
+----
++
+.Creating a `sealed` `Error`
+[source,java]
+----
+sealed interface OrderError {
+    record CustomerNotFound(CustomerId id) implements OrderError {}
+    record ProductNotFound(ProductId id) implements OrderError {}
+}
+----
++
+* Functional code often makes expected errors explicit in the return type
+* This is making errors as data, *not things that are thrown out and disruptive*, part of a contract that we can reason about
+
 === `Optional` / `Option`
 
 * Represents a value that may or may not be present
 * Forces callers to handle absence explicitly — no null leaks
+* Comes in Java, `Optional.of(...)`, in Scala it is `Option`
+* Kotlin often uses nullable type `T?`
 
 [source,java]
 ----
@@ -20,18 +47,33 @@ Optional<User> findUser(int id) { ... }
 
 === `Either<L, R>`
 
-* Left = failure, Right = success — both branches are typed
 * Callers must handle both paths; nothing is hidden
+* Semantically, it means that something can go specifically wrong.
+* Left generally wraps around any generic type of your choice
+* Has two cases: `Right` which is a success: `Left` which is a failure
+* Not available in Java, though you can create your own or use https://vavr.io/[Vavr]
+* In Kotlin, you can use a library, https://github.com/arrow-kt/arrow[Arrow]
+* Available in the Scala Standard Library
 
 === `Try<T>`
 
 * Wraps a computation that might throw and converts exceptions to values
 * Composable — chain operations without `try/catch`
+* Semantically, it means that something can go generically wrong
+* Similar to  `Either`, but `Failure` always wraps a `Throwable`
+* Has two children: `Success` and `Failure`
+* Not available in Java, though you can create your own or use Vavr
+* In Kotlin, it is not available, though you can use `Either` with https://github.com/arrow-kt/arrow[Arrow]
+* Available in the Scala Standard Library
 
 === `Validated`
 
 * Accumulates multiple errors instead of short-circuiting on the first
 * Ideal for form validation, config parsing, or input checking
+* Has two children: `Valid`, and `Invalid`
+* Not available in Java, though you can create your own or use Vavr
+* In Kotlin, you can use a library, https://github.com/arrow-kt/arrow[Arrow]
+* Not available Scala Standard Library, but available in many libraries
 
 === Compare to Exceptions
 
@@ -40,5 +82,18 @@ Optional<User> findUser(int id) { ... }
 
 === Returning Composable Values
 
-* `Optional`, `Validated`, and `CompletableFuture` all support `map` and `flatMap`
+* `Optional`, `Validated`, and `CompletableFuture` all support `map` and `flatMap`, although for `CompletableFuture`, they are called `thenApply` and and `thenCompose`.
 * Errors propagate through the chain without `try/catch` boilerplate
+
+[.columns]
+=== Demo: Creating an `Either`
+
+[.column]
+--
+image::legolab.jpg[]
+--
+
+[.column]
+--
+Let's watch as I use an Agent to convert the HexArch application into something that uses a custom `Either`.
+--

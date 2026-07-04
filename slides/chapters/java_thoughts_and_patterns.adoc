@@ -21,8 +21,10 @@ Comparator<Person> byAge = Comparator.comparing(Person::age);
 [source,java]
 ----
 try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
-    var a = scope.fork(() -> fetchA());
-    scope.join().throwIfFailed();
+    var user = scope.fork(() -> findUser());
+    var invoices = scope.fork(() -> findInvoices());
+    scope.join();
+    return new Response(user, invoices);
 }
 ----
 
@@ -30,9 +32,25 @@ try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
 
 * Vavr's `Validation` accumulates all errors before returning — no early exit
 * Compose individual validators with `combine` into a single result
+* `.ap` applies the constructor only when all validations are valid
+
+[source,java]
+----
+public Validation<Seq<String>, User> validateUser(
+    String name, String email) {
+    return Validation
+        .combine(
+            validateName(name),
+            validateEmail(email))
+        .ap(User::new);
+}
+----
+
+NOTE: Vavr calls this operation `.ap`
 
 === Functional Operations Recap
 
 * `flatMap` — sequence dependent computations; short-circuits on failure
 * `map` — transform a value without unwrapping the container
 * `reduce` — collapse a collection into one value
+* `ap` — combine independent values while keeping collected errors

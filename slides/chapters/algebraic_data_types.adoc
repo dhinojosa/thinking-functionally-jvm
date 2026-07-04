@@ -3,10 +3,90 @@ ifndef::imagesdir[:imagesdir: ../images]
 == Algebraic Data Types
 image::iStock-1181695869.jpg[background, size=cover]
 
-=== What Are ADTs?
+=== What Are Algebraic Data Types?
 
 * A closed set of types — either a product (AND) or a sum (OR)
 * The type system enforces exhaustive handling; no case is silently ignored
+
+=== Product Types
+
+* A product type combines fields together
+* Read it as AND: a `Planet` has a name, radius, and mass
++
+[source,java]
+----
+record Planet(
+    String name,
+    double radius,
+    double mass
+) {}
+----
+
+=== Sum Types
+
+* A sum type chooses one case from a closed set
+* Read it as OR: a `Shape` is a `Circle`, `Rectangle`, or `Triangle`
++
+[source,java]
+----
+sealed interface Shape
+    permits Circle, Rectangle, Triangle {}
+
+record Circle(double radius) implements Shape {}
+record Rectangle(double length, double height) implements Shape {}
+record Triangle(double base, double height) implements Shape {}
+----
+
+=== Use `enum` for Same Shape
+
+* Use an `enum` when each case is semantically the same kind of thing
+* Each planet has the same fields: `radius` and `mass`
++
+[source,java]
+----
+enum Planet {
+    MERCURY(2_439.7, 3.3011e23),
+    VENUS(6_051.8, 4.8675e24),
+    EARTH(6_371.0, 5.97237e24);
+
+    private final double radius;
+    private final double mass;
+
+    Planet(double radius, double mass) {
+        this.radius = radius;
+        this.mass = mass;
+    }
+}
+----
+
+=== Use Sealed Types for Different Shapes
+
+* Use sealed types when each case has different semantics
+* Circle, Rectangle, and Triangle are all shapes, but they are not built the same way
+** Circle is defined by its `radius`
+** Rectangle is defined by its `height` and `width`
+** Triangle is defined by its `height` and `base`
+
+=== Describe First, Interpret Later
+
+* Algebraic Data Types describe the data first
+* What we do with that data is left to interpretation _after defining the data_
+* This is the beginning of the interpreter pattern
++
+[source,java]
+----
+sealed interface Shape
+    permits Circle, Rectangle, Triangle {}
+----
++
+* Given our shape, we can interpret it as an SVG, drawing onto a UI, or describing it as JSON.
++
+[source,java]
+----
+String drawSvg(Shape shape) { ... }
+void drawCanvas(Shape shape, Canvas canvas) { ... }
+String toJson(Shape shape) { ... }
+----
 
 === Commands
 
