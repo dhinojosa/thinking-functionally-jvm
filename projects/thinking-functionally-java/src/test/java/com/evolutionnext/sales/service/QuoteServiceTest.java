@@ -1,7 +1,7 @@
-package com.evolutionnext.service;
+package com.evolutionnext.sales.service;
 
 
-import com.evolutionnext.domain.*;
+import com.evolutionnext.sales.domain.*;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 

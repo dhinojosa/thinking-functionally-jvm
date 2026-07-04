@@ -1,6 +1,6 @@
 == Lab 1: Building a Customer Quote
 
-. Look for the domain models in `com.evolutionnext.domain`
+. Look for the domain models in `com.evolutionnext.sales.domain`
 .. `CustomerId`
 .. `Customer`
 .. `Order`
@@ -8,7 +8,7 @@
 .. `Quote`
 .. `OrderId`
 .. `Dollars`
-. Look for the supporting services in `com.evolutionnext.service`
+. Look for the supporting services in `com.evolutionnext.sales.service`
 .. `CustomerService`
 .. `OrderService`
 .. `DiscountService`
@@ -26,7 +26,7 @@ public Optional<Quote> createQuote(CustomerId id) {
 ... `Optional#get()`
 ... Nested `if` statements
 ... Nested `isPresent()` checks
-. Open `com.evolutionnext.service.QuoteServiceTest` in _src/test/java_
+. Open `com.evolutionnext.sales.service.QuoteServiceTest` in _src/test/java_
 . Add assertions to both tests: `testQuoteSuccess` and `testQuoteFailure`
 . Run the tests in your IDE, or in the Terminal
 +

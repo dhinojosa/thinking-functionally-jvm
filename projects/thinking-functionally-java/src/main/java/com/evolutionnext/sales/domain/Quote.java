@@ -1,4 +1,4 @@
-package com.evolutionnext.domain;
+package com.evolutionnext.sales.domain;
 
 import java.util.List;
 

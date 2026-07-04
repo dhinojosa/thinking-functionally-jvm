@@ -1,6 +1,6 @@
-package com.evolutionnext.service;
-import com.evolutionnext.domain.Customer;
-import com.evolutionnext.domain.Order;
+package com.evolutionnext.sales.service;
+import com.evolutionnext.sales.domain.Customer;
+import com.evolutionnext.sales.domain.Order;
 
 import java.util.List;
 import java.util.Optional;

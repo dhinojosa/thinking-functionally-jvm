@@ -1,6 +1,6 @@
-package com.evolutionnext.service;
-import com.evolutionnext.domain.CustomerId;
-import com.evolutionnext.domain.Quote;
+package com.evolutionnext.sales.service;
+import com.evolutionnext.sales.domain.CustomerId;
+import com.evolutionnext.sales.domain.Quote;
 
 import java.util.Optional;
 public final class QuoteService {
