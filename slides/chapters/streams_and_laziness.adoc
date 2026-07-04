@@ -3,31 +3,76 @@ ifndef::imagesdir[:imagesdir: ../images]
 == Streams and Laziness
 image::iStock-1181695869.jpg[background, size=cover]
 
+
+=== Lazy vs. Eager Evaluation
+
+* *Eager*: evaluates immediately
+** Collections, Loops
+* *Lazy*: evaluates on demand
+** Java Streams, `Supplier`
+
 === Delayed Computation
 
 * Lazy evaluation defers work until the result is needed
 * Avoids computing things that may never be used
-
-=== Lazy vs. Eager Evaluation
-
-* Eager: evaluates immediately — collections, loops
-* Lazy: evaluates on demand — Java Streams, `Supplier`
-
++
 [source,java]
 ----
-// Nothing executes yet
+Supplier<LocalDateTime> now =
+    () -> LocalDateTime.now();
+----
++
+* Time is not read until `get()` runs
++
+[source,java]
+----
+LocalDateTime startedAt = now.get();
+----
+
+=== Memoization
+
+* The previous example is not memoized, each call to `get()` recomputes the value
+* Memoization caches the first result and reuses it on subsequent calls
+* We can achieve Memoization with a new feature in Java, `LazyConstant`
++
+[source,java]
+----
+LazyConstant<LocalDateTime> localDateTimeLazyConstant =
+   LazyConstant.of(() -> LocalDateTime.now());
+----
++
+* Given the above and given the time is `2026-07-04T10:26:51-07:00`, using `get()` will always return the same date and time because it is _memoized_
++
+[source,java]
+----
+localDateTimeLazyConstant.get();
+----
++
+NOTE: `LazyConstant` is a Preview API in https://openjdk.org/jeps/526[JEP 526]
+
+=== Streams are Lazy
+
+* Streams are inherently lazy, nothing will execute until you perform a _terminal operation_
+* `filter`, `map`, `flatMap` are intermediate operations
+* Terminal operations include `collect`, `findFirst`, `reduce`, `toList`
+* The following just returns a pipeline object. In OpenJDK it is called a `ReferencePipeline`
++
+[source,java]
+----
 Stream.of(1, 2, 3).filter(n -> n > 1);
 ----
 
 === Pipelines
 
-* Chain `filter`, `map`, `flatMap` into a single declarative pass
-* A terminal operation (`collect`, `findFirst`, `reduce`) triggers evaluation
+In the following example::
+* `stream()` creates the stream
+* `filter()` and `map` are intermediate operations
+* `toList()` is a terminal operation, the stream has materialized
 
 [source,java]
 ----
 list.stream()
     .filter(s -> !s.isEmpty())
     .map(String::toUpperCase)
-    .collect(toList());
+    .toList();
 ----
