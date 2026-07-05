@@ -30,3 +30,7 @@ local.properties
 
 slides/*.html
 slides/*.pdf
+
+.claude
+specs/
+.session
