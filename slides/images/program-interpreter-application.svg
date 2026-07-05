@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="800" viewBox="0 0 1400 800" role="img" aria-labelledby="title desc">
+  <title id="title">Program, Interpreter, Application</title>
+  <desc id="desc">A diagram showing data, algebra, and programs inside one box, an interpreter inside another, and both boxes inside an application boundary.</desc>
+  <defs>
+    <style>
+      .outer { fill: #f7f9fb; stroke: #5d87a1; stroke-width: 5; }
+      .box { fill: #ffffff; stroke: #334155; stroke-width: 4; }
+      .inner { fill: #eef6f8; stroke: #5d87a1; stroke-width: 3; }
+      .text { font-family: Lato, Arial, sans-serif; fill: #111827; }
+      .title { font-size: 48px; font-weight: 700; }
+      .label { font-size: 34px; font-weight: 700; }
+      .body { font-size: 27px; }
+      .arrow { stroke: #334155; stroke-width: 5; fill: none; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="14" markerHeight="10" refX="12" refY="5" orient="auto">
+      <path d="M 0 0 L 14 5 L 0 10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect class="outer" x="55" y="55" width="1290" height="690" rx="18"/>
+  <text class="text title" x="95" y="125">Application</text>
+
+  <rect class="box" x="110" y="170" width="760" height="515" rx="14"/>
+  <text class="text label" x="150" y="230">Description</text>
+
+  <rect class="inner" x="155" y="270" width="660" height="95" rx="10"/>
+  <text class="text label" x="190" y="330">Data</text>
+  <text class="text body" x="360" y="330">domain values, commands, events</text>
+
+  <rect class="inner" x="155" y="400" width="660" height="95" rx="10"/>
+  <text class="text label" x="190" y="460">Algebra</text>
+  <text class="text body" x="360" y="460">capabilities, ports, vocabulary</text>
+
+  <rect class="inner" x="155" y="530" width="660" height="95" rx="10"/>
+  <text class="text label" x="190" y="590">Programs</text>
+  <text class="text body" x="360" y="590">pipelines, topology, composition</text>
+
+  <rect class="box" x="965" y="245" width="300" height="290" rx="14"/>
+  <text class="text label" x="1018" y="325">Interpreter</text>
+  <text class="text body" x="1010" y="390">runs the program</text>
+  <text class="text body" x="1010" y="430">chooses runtime</text>
+  <text class="text body" x="1010" y="470">performs effects</text>
+
+  <path class="arrow" d="M 870 425 C 905 425 925 425 960 425"/>
+</svg>

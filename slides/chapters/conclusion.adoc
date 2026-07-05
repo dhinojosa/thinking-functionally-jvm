@@ -1,0 +1,37 @@
+ifndef::imagesdir[:imagesdir: ../images]
+[.chapter]
+== Conclusion
+image::iStock-1181695869.jpg[background, size=cover]
+
+=== Java Is Enough to Start
+
+* Java does not have every feature Scala or Kotlin has
+* You can still move toward a functional design goal today
+* The goal is better code, not language purity
+* Experiment with Scala, Kotlin – it's not scary
+
+=== What Gets Better
+
+* Readability: smaller methods with clearer inputs and outputs
+* Maintenance: fewer hidden effects and fewer surprise mutations
+* Testing: more behavior can be exercised without infrastructure
+* Aesthetic: code starts to show the shape of the problem
+
+=== Keep the Direction
+
+* Prefer values to mutation
+* Prefer expressions to statements
+* Prefer explicit results to hidden control flow
+* Prefer separating description from execution
+
+=== Be Ready for More
+
+* Languages and libraries keep adding functional features
+* Java keeps moving, even if it moves carefully
+* When stronger abstractions arrive, the mental model will already be familiar
+
+=== Final Thought
+
+* Thinking functionally is a design discipline
+* The syntax helps, but the mindset matters more
+* Start with Java, and let better habits carry forward

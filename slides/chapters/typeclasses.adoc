@@ -6,12 +6,28 @@ image::iStock-1181695869.jpg[background, size=cover]
 === What Is a Typeclass?
 
 * A typeclass defines a capability that a type can satisfy from the outside
-* Behavior is decoupled from data — open to extension without inheritance
+* Behavior is decoupled from data: open to extension without inheritance
+* The type stays simple; the behavior is supplied separately
+
+=== Why Java Developers Should Care
+
+* `Comparator<T>` already feels typeclass-shaped
+* It adds ordering without changing the original type
+* Scala generalizes this pattern and lets the compiler find the right behavior
 
 === `Show`
 
 * Converts a value to a human-readable string
-* Defined outside the class — no coupling to the data type
+* Defined outside the class: no coupling to the data type
+
+[source,scala]
+----
+given Show[User] with
+  def show(user: User): String =
+    s"User(${user.name})"
+----
+
+* The same instance can be written in shorthand
 
 [source,scala]
 ----
@@ -20,25 +36,50 @@ given Show[User] = user => s"User(${user.name})"
 
 === `Eq`
 
-* Type-safe equality — can't accidentally compare incompatible types
+* Type-safe equality: can't accidentally compare incompatible types
 * Defined separately from `equals`; compiler enforces it
+
+[source,scala]
+----
+given Eq[Money] with
+  def eqv(left: Money, right: Money): Boolean =
+    left.cents == right.cents
+----
+
+* The same instance can be written in shorthand
+
+[source,scala]
+----
+given Eq[Money] =
+  (left, right) => left.cents == right.cents
+----
 
 === `Order` and `Comparator`
 
 * `Order` is a typeclass for total ordering
-* Java's `Comparator` is the closest analog — explicit, not inherited
-
++
+[source,scala]
+----
+given Order[Money] with
+  def compare(left: Money, right: Money): Int =
+    left.cents.compare(right.cents)
+----
+* Java's `Comparator` is the closest analog: explicit, not inherited
+* Java had the right abstraction idea all along
++
 [source,java]
 ----
 Comparator<Money> byAmount = Comparator.comparingLong(Money::cents);
 ----
 
-=== Java's Path to Type classes
+=== Java's Path to Typeclasses
 
-* Project Valhalla and future proposals explore interface-based capabilities
-* Data-oriented programming separates what data *is* from what it can *do*
+* OpenJDK experiments have explored typeclass-like interface capabilities
+* This is not ordinary Java today
+* The direction matters: behavior can be selected by type, not inheritance
 
 === Separating Behavior from Data
 
 * Add new operations to existing types without touching them
 * Makes code open-closed at the data layer, not just the object layer
+* This is the bridge from Java patterns to Scala typeclasses

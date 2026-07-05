@@ -78,14 +78,22 @@ In Thinking Functionally in Java, we explore how far disciplined functional desi
       * `map`
       * `reduce`
 11. About Scala
-12. Typeclasses
+12. Scala Context Parameters
+    * `given`
+    * `using`
+    * `summon`
+    * Context bounds
+13. Typeclasses
     * `Show`
     * `Eq`
     * `Order`
     * `Comparator`
     * Java's Plan to include Typeclasses
     * Separating behavior from data, data-oriented programming
-13. Functional Abstraction Typeclasses
+14. Higher-Kinded Types
+    * `F[A]`
+    * Reusable Programs
+15. Functional Abstraction Typeclasses
     * `Monoid`
     * `Functor`
     * `Applicative`
@@ -93,27 +101,24 @@ In Thinking Functionally in Java, we explore how far disciplined functional desi
       * For-Comprehensions
       * In-Channel Errors
     * `Traverse`
-14. Higher-Kinded Types
-    * `F[A]`
-    * Reusable Programs
-15. Effectful Programs
+16. Effectful Programs
     * `Future`
     * `IO`
     * `F[_]`
     * Clocks and Time
     * Programs vs. Values
-16. Programs and Interpreters
+17. Programs and Interpreters
     * Data
     * Algebra
     * Programs
     * Interpreters
     * Why Effects Exist
     * A note on `@Transactional`
-17. Beyond Java
-    * Scala
-    * Cats Effect
-    * Arrow (Cat Style to its own style)
-    * The “Direct Style” vs. “Functional Style” discussion
+18. Conclusions
+    * Java Is Enough to Start
+    * What Gets Better
+    * Keep the Direction
+    * Be Ready for More
 
 ## Editing and Rendering Slides
 

@@ -8,15 +8,42 @@ image::iStock-1181695869.jpg[background, size=cover]
 * Runs on the JVM and interoperates freely with Java libraries
 * Statically typed with a substantially richer type system than Java
 
-=== What Scala Adds
+[.columns]
+=== What Scala Adds to Java
 
-* Case classes, pattern matching, and first-class functions are built in
-* Higher-kinded types and typeclasses without library workarounds
+[.column]
+--
+* Case classes
+* Pattern matching
+* Extension methods
+* Typeclasses
+--
+
+[.column]
+--
+* Higher-kinded types
+* Opaque types
+* Open classes
+* Union and intersection types
+--
+
+=== Why It Matters Here
+
+* Java can model many functional ideas directly
+* Scala can abstract over those ideas more naturally
+* The rest of the workshop asks: what becomes easier when the type system can express more?
+
+=== Higher-Kinded Types
+
+* Scala can abstract over `F[A]`
+* Java can abstract over `A`, but not over the shape `F[_]`
+* This is the key move behind reusable effectful programs
 
 === When to Consider Scala
 
 * When the Java type system cannot express your domain clearly
-* Cats Effect and other effect systems offer effect systems Java cannot replicate natively
+* When repeated Java patterns point to a missing abstraction
+* When effect systems, typeclasses, or HKTs make the design simpler
 
 === The Trade-off
 

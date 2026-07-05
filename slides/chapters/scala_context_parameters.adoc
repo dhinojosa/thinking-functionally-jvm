@@ -1,0 +1,71 @@
+ifndef::imagesdir[:imagesdir: ../images]
+[.chapter]
+== Scala Context Parameters
+image::iStock-1181695869.jpg[background, size=cover]
+
+=== Why This Syntax Matters
+
+* Some values are used across many method calls
+* Scala uses contextual values and parameters for that wiring
+* The compiler can pass the right value when the type matches
+
+=== `given`
+
+* A `given` defines a contextual value
+* Think of it as a value the compiler is allowed to find
++
+[source,scala]
+----
+final case class AppConfig(prefix: String)
+
+given AppConfig =
+  AppConfig("[workshop]")
+----
+
+=== `using`
+
+* A `using` parameter asks the compiler for a contextual value
+* The method states what context it needs
++
+[source,scala]
+----
+def log(message: String)(using config: AppConfig): Unit =
+  println(s"${config.prefix} $message")
+
+log("starting")
+----
+
+=== Summoning
+
+* `summon` retrieves a contextual value explicitly
+* Useful when you want to name the context inside a method
++
+[source,scala]
+----
+def prefix(using AppConfig): String =
+  summon[AppConfig].prefix
+----
+
+=== Context Bounds
+
+* Context bounds are compact `using` syntax
+* `F[_]: Monad` means "there is a `Monad[F]` available"
++
+[source,scala]
+----
+def program[F[_]: Monad](value: Int): F[Int] =
+  Monad[F].pure(value)
+----
+
+=== The Translation
+
+* The compact syntax hides a `using` parameter
++
+[source,scala]
+----
+def program[F[_]: Monad](value: Int): F[Int]
+
+def program[F[_]](value: Int)(using Monad[F]): F[Int]
+----
+
+NOTE: Typeclasses use this same mechanism; the next chapter gives the pattern a name.

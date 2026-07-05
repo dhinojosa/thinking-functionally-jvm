@@ -43,14 +43,16 @@ include::chapters/java_thoughts_and_patterns.adoc[]
 
 include::chapters/about_scala.adoc[]
 
+include::chapters/scala_context_parameters.adoc[]
+
 include::chapters/typeclasses.adoc[]
 
-include::chapters/functional_abstraction_typeclasses.adoc[]
-
 include::chapters/higher_kinded_types.adoc[]
+
+include::chapters/functional_abstraction_typeclasses.adoc[]
 
 include::chapters/effectful_programs.adoc[]
 
 include::chapters/programs_and_interpreters.adoc[]
 
-include::chapters/beyond_java.adoc[]
+include::chapters/conclusion.adoc[]

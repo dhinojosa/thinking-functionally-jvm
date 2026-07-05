@@ -5,30 +5,124 @@ image::iStock-1181695869.jpg[background, size=cover]
 
 === Data
 
-* Programs are described as data — sealed types, case classes, records
-* The data layer carries no side effects; it only says what should happen
+* Domain values, commands, events, and errors
+* These are the things we describe
+* They carry meaning without running anything
 
 === Algebra
 
-* An algebra defines the vocabulary of operations for a domain
-* Expressed as a sealed type hierarchy or a typeclass interface
+* Capabilities, ports, and business vocabulary
+* What operations can this program ask for?
++
+[source,scala]
+----
+trait Orders[F[_]]:
+  def create(command: CreateOrder): F[OrderId]
+
+trait Payments[F[_]]:
+  def authorize(payment: Payment): F[Authorization]
+----
 
 === Programs
 
-* A program chains algebra terms together — it is just a value
-* Programs compose freely; raw instructions do not
+* Programs chain capabilities into a pipeline
+* Think water pipes, air ducts, and circuits
+* The topology matters: how the pieces connect is the design
++
+[source,scala]
+----
+final class Cart[F[_]: MonadThrow](
+    orders: Orders[F],
+    payments: Payments[F]
+):
+  def checkout(command: CreateOrder): F[OrderId] =
+    for {
+      orderId <- orders.create(command)
+      _       <- payments.authorize(command.payment)
+    } yield orderId
+
+  ...
+----
++
+* *This is analogous to a work order.*
 
 === Interpreters
 
-* An interpreter walks program data and performs the real effects
+* The interpreter is the part that actually runs
+* It takes the described program and chooses a real runtime
 * Swap interpreters to change behavior: production vs. test, SQL vs. in-memory
+* `unsafeRunAsync` takes the program and runs it at the edge
++
+[source,scala]
+----
+val program: IO[OrderId] =
+  cart.checkout(command)
+
+program.unsafeRunAsync {
+  case Right(orderId) => println(orderId)
+  case Left(error)   => error.printStackTrace()
+}
+----
+
+=== Application Shape
+
+image::program-interpreter-application.svg[width=92%]
 
 === Why Effects Exist
 
-* Effects isolate impurity at the boundary — the rest of the program stays pure
+* Effects isolate impurity at the boundary: the rest of the program stays pure
 * Push I/O to the edges; keep the business logic functional and testable
 
 === A Note on `@Transactional`
 
-* `@Transactional` hides a side effect behind an annotation — invisible in the type
-* Effect systems make transactions explicit, composable, and visible at every call site
+* Java enterprise applications often use annotations or interceptors for transactions
+* Spring and Quarkus both support this style, though details differ
+* AOP/interceptors wrap a method call with infrastructure behavior
+
+=== Annotation Boundary
+
+* In annotation-driven Java, the transaction boundary can be implicit infrastructure
+* That is useful, but it is not visible in the return type
++
+[source,java]
+----
+@Transactional
+OrderId createOrder(CreateOrder command) {
+    ...
+}
+----
+
+=== Interpreter Boundary
+
+* In doobie/http4s, database programs can be values
+* `.transact(xa)` interprets `ConnectionIO[A]` into `IO[A]`
+* The transaction boundary is explicit at the composition boundary
++
+[source,scala]
+----
+val program: ConnectionIO[OrderId] =
+  createOrder(command)
+
+val result: IO[OrderId] =
+  program.transact(xa)
+----
+
+* The unsafe run happens at the outside edge
++
+[source,scala]
+----
+result.unsafeRunSync()
+----
+
+[.columns]
+=== Demo: HTTP4s and Transactions
+
+[.column]
+--
+image::legolab.jpg[]
+--
+
+[.column]
+--
+Let's look at a small HTTP4s application and where the transaction boundary is applied.
+--

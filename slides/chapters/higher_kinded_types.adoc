@@ -5,20 +5,60 @@ image::iStock-1181695869.jpg[background, size=cover]
 
 === `F[A]`
 
-* A higher-kinded type takes another type as a parameter — `F[_]`
-* Write code that works for any container: `Option`, `List`, `Future`, `IO`
+* A higher-kinded type takes another type as a parameter: `F[_]`
+* Write code that works for any container: `Option`, `List`, `Future`
 
+=== The Shape Is the Difference
+
+* `Future[User]`
+* `Option[User]`
+* `Either[Throwable, User]`
+* The payload is still `User`
+* The context is what changes
+
+=== One Program
+
+* *Before:* Repeat the same logic for each effect
++
 [source,scala]
 ----
-def fetchAll[F[_]: Monad](ids: List[Int]): F[List[User]]
+def loadFuture(id: UserId): Future[User]
+
+def loadOption(id: UserId): Option[User]
+
+type MyEither[A] = Either[Throwable, A]
+def loadEither(id: UserId): MyEither[User]
+----
+
+* *After:* Abstract over the context
++
+[source,scala]
+----
+def load[F[_]](
+    id: UserId,
+    repository: UserRepository[F]
+): F[User]
+----
+
+=== Type Lambdas
+
+* Sometimes the effect has more than one type parameter
+* Fix one side, then abstract over the remaining `A`
++
+[source,scala]
+----
+type MyEither = [A] =>> Either[Throwable, A]
+
+def load[F[_]](id: UserId): F[User]
 ----
 
 === Reusable Programs
 
-* Abstract over the effect type — swap `IO` for `Future` without changing logic
-* Test with the identity monad; deploy with a real effect system
+* Test with one effect
+* Deploy with another effect
+* Keep the business program the same
 
 === Java's Limitation
 
-* Java generics cannot express `F[_]` — only `F<A>` with a concrete `F`
+* Java generics cannot express `F[_]`: only `F<A>` with a concrete `F`
 * Workarounds exist (Vavr, higher-kinded emulation) but are verbose and incomplete

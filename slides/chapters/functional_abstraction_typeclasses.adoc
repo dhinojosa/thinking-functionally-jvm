@@ -7,27 +7,111 @@ image::iStock-1181695869.jpg[background, size=cover]
 
 * A type with a binary `combine` operation and an identity (zero) element
 * Strings, lists, and integers under addition are all monoids
++
+[source,scala]
+----
+trait Monoid[A]:
+  def empty: A
+  def combine(left: A, right: A): A
 
+given Monoid[String] with
+  def empty: String = ""
+  def combine(left: String, right: String): String =
+    left + right
+
+summon[Monoid[String]].combine("hello ", "world")
+----
+
+=== `Monoid` in Java
+
+* Java can express the same capability as an interface
++
 [source,java]
 ----
-// identity + combine
-"" + "hello" == "hello"
+interface Monoid<T> {
+    T empty();
+    T combine(T left, T right);
+}
 ----
+
+* The instance is an object instead of a compiler-selected `given`
++
+[source,java]
+----
+Monoid<String> stringMonoid = new Monoid<>() {
+    public String empty() { return ""; }
+    public String combine(String left, String right) {
+        return left + right;
+    }
+};
+
+stringMonoid.combine("hello ", "world");
+----
+
+NOTE: There is a Brian Goetz video on Growing a Language https://www.youtube.com/watch?v=Gz7Or9C0TpM&t=1259s[and using Typeclasses]
+
+=== Experimental Java Witness
+
+* A witness is evidence that a type has a capability
++
+[source,java]
+----
+__witness Monoid<String> STRING_MONOID = new Monoid<>() {
+    public String empty() { return ""; }
+
+    public String combine(String left, String right) {
+        return left + right;
+    }
+};
+----
+
+* The witness can be looked up by type
++
+[source,java]
+----
+Monoid<String> monoid = Monoid<String>.__witness;
+
+monoid.combine("hello ", "world");
+----
+
+WARNING: *This is not Java today.* OpenJDK Valhalla explored this as experimental typeclass support; the syntax and feature are not settled.
 
 === `Functor`
 
 * Any type that supports `map` over its contents while preserving structure
 * Laws: mapping the identity function changes nothing; composition holds
+* Remember `map`: this is the abstraction behind it
+
+[source,scala]
+----
+trait Functor[F[_]]:
+  def map[A, B](fa: F[A])(f: A => B): F[B]
+
+Functor[Option].map(Some("ada"))(_.toUpperCase)
+----
 
 === `Applicative`
 
-* Applies a wrapped function to a wrapped value — `F[A => B]` to `F[A]`
+* Applies a wrapped function to a wrapped value: `F[A => B]` to `F[A]`
 * Enables independent effects to run without sequencing
+* Remember `Validation`: this is how independent checks combine
+
+[source,scala]
+----
+trait Applicative[F[_]] extends Functor[F]:
+  def pure[A](value: A): F[A]
+  def ap[A, B](ff: F[A => B])(fa: F[A]): F[B]
+
+validatedName
+  .map(name => email => User(name, email))
+  .ap(validatedEmail)
+----
 
 === `Monad`
 
-* A `Functor` with `flatMap` — chains dependent computations
+* A `Functor` with `flatMap`: chains dependent computations
 * For-comprehensions in Scala desugar to nested `flatMap` calls
+* Remember `flatMap`: this is the abstraction behind it
 
 [source,scala]
 ----
@@ -42,7 +126,47 @@ for {
 * Monadic `flatMap` short-circuits on the first failure
 * Use `Applicative` when all errors should accumulate instead
 
+=== `Foldable`
+
+* Folds a structure into a summary value
+* This is the abstraction behind `reduce`
+* It does not preserve the original shape
+
+[source,scala]
+----
+trait Foldable[F[_]]:
+  def foldLeft[A, B](fa: F[A], start: B)
+      (f: (B, A) => B): B
+
+Foldable[List].foldLeft(List(1, 2, 3), 0)(_ + _)
+----
+
 === `Traverse`
 
 * Flips a collection of effects into an effect of a collection
-* `List[Future[T]]` → `Future[List[T]]` — sequence without manual loops
+* `List[Future[T]]` to `Future[List[T]]`: sequence without manual loops
+* It walks a structure while preserving the structure
+
+[source,scala]
+----
+trait Traverse[F[_]] extends Functor[F], Foldable[F]:
+  def traverse[G[_]: Applicative, A, B](fa: F[A])
+      (f: A => G[B]): G[F[B]]
+
+List(1, 2, 3).traverse(findUser)
+----
+
+=== `Foldable` vs. `Traverse`
+
+[cols="1,2,2", options="header"]
+|===
+| Typeclass | Question | Shape
+
+| `Foldable`
+| How do I summarize this?
+| `List[A]` to `B`
+
+| `Traverse`
+| How do I walk this with an effect?
+| `List[F[A]]` to `F[List[A]]`
+|===

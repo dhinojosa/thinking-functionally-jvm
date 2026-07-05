@@ -6,16 +6,47 @@ image::iStock-1181695869.jpg[background, size=cover]
 === What Is an Effect?
 
 * An effect is a description of a computation that interacts with the outside world
-* Effects are values — they describe what to do, not do it immediately
+* Effects are values: they describe what to do, not do it immediately
 
 === `Future`
 
-* Starts running immediately — eager, and hard to reason about in composition
+* Starts running immediately: eager, and hard to reason about in composition
 * Error handling is callback-based and easy to accidentally drop
 
-=== `IO`
+=== A Toy `IO`
 
-* Describes a computation without executing it — lazy and composable
+* This is a teaching model, not Cats Effect internals
+* The important idea: describe now, run later
++
+[source,scala]
+----
+sealed trait IO[A]
+
+object IO:
+  final case class Pure[A](value: A) extends IO[A]
+  final case class Delay[A](thunk: () => A) extends IO[A]
+  final case class FlatMap[A, B](
+      source: IO[A],
+      next: A => IO[B]
+  ) extends IO[B]
+----
+
+NOTE: `Delay` should look familiar: this is the same idea as `LazyConstant`.
+
+=== Programs as Values
+
+* `IO[A]` is a value that describes how to produce an `A`
+* Nothing happens until an interpreter runs it
++
+[source,scala]
+----
+val greeting: IO[String] =
+  IO.Delay(() => "Hello")
+----
+
+=== Cats Effect `IO`
+
+* Describes a computation without executing it: lazy and composable
 * Nothing runs until you call the interpreter at the edge of the world
 
 [source,scala]
@@ -24,17 +55,131 @@ val program: IO[Unit] =
   IO.println("Hello") >> IO.println("World")
 ----
 
-=== `F[_]` — Abstract Effects
+=== `MonadThrow`
 
-* Write logic against `F[_]` — swap the runtime without changing the program
+* A monad with in-channel error capability
+* We already saw this idea: _errors travel in the returned value_
+* Use it as a constraint when the program can fail
++
+[source,scala]
+----
+def requirePositive[F[_]: MonadThrow](value: Int): F[Int] =
+  if (value > 0) then value.pure[F]
+  else MonadThrow[F].raiseError(
+    IllegalArgumentException("value must be positive")
+  )
+----
+
+=== `F[_]`: Abstract Effects
+
+* Write logic against `F[_]` which let's us swap the runtime without changing the program
 * Enables testability, mock effects, and multiple backends
+
++
+[source,scala]
+----
+def createOrder[F[_]: MonadThrow](
+    command: CreateOrder
+): F[OrderId]
+----
 
 === Clocks and Time
 
-* Inject `Clock` as a dependency — never call `System.currentTimeMillis()` directly
-* Testable time: freeze instants, simulate the future, replay the past
+* Direct time reads are side effects
++
+[source,scala]
+----
+val startedAt: Long =
+  System.currentTimeMillis()
+----
+
+* Cats Effect makes time an effectful capability
++
+[source,scala]
+----
+def measure[F[_]: Clock, A](program: F[A])
+    (using Monad[F]): F[(A, FiniteDuration)] =
+  for {
+    start <- Clock[F].monotonic
+    value <- program
+    end <- Clock[F].monotonic
+  } yield (value, end - start)
+----
+
+=== Java Time as a Capability
+
+* `cats-effect-time` provides Java Time operations as typeclass capabilities
++
+[source,scala]
+----
+import io.chrisdavenport.cats.effect.time.JavaTime
+
+def createdAt[F[_]: JavaTime]: F[Instant] =
+  JavaTime[F].getInstant
+----
+
+* Time stays replaceable in tests
+
+NOTE: Cats Effect `Clock` provides monotonic and real time. `cats-effect-time` adds Java Time values such as `Instant`.
+
+=== Using Java Time
+
+* *Unit Test:* provide a fixed `Clock[IO]`
++
+[source,scala]
+----
+val fixed = Instant.parse("2026-01-01T00:00:00Z")
+
+given Clock[IO] with
+  def monotonic: IO[FiniteDuration] =
+    IO.pure(0.seconds)
+
+  def realTime: IO[FiniteDuration] =
+    IO.pure(fixed.toEpochMilli.millis)
+
+createdAt[IO]
+----
+
+* *Integration Test:* use the real runtime capability
++
+[source,scala]
+----
+import io.chrisdavenport.cats.effect.time.implicits._
+
+createdAt[IO]
+----
+
+=== Swapping Effects in Tests
+
+* The program asks for capabilities
+* The test supplies a different interpreter
+* The business logic does not change
++
+[source,scala]
+----
+val production: IO[OrderId] =
+  createOrder[IO](command)
+
+type TestEffect[A] = State[TestWorld, A]
+
+val test: State[TestWorld, OrderId] =
+  createOrder[TestEffect](command)
+----
 
 === Programs vs. Values
 
-* A program is just a value until interpreted — it can be inspected, composed, retried
+* A program is just a value until interpreted: it can be inspected, composed, retried
 * Separating description from execution is the foundation of effect systems
+
+[.columns]
+=== Demo: Swapping an Effect in Cats
+
+[.column]
+--
+image::legolab.jpg[]
+--
+
+[.column]
+--
+Let's see the same program run with a production effect and a testing effect.
+--
