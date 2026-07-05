@@ -29,6 +29,12 @@ functional programming, Cats, Cats Effect, or JVM functional abstractions.
   - `map` points toward `Functor`.
   - `flatMap` points toward `Monad`.
   - independent validation points toward `Applicative`.
+- For `Applicative`, prefer examples such as `mapN`/`map3` when teaching
+  independent validation. The raw `ap` form is useful as a deeper reveal, but it
+  can distract from the main lesson with curried-function plumbing.
+- For error accumulation examples, prefer `ValidatedNel` or another collection
+  of errors over raw `Validated[String, A]`, because string concatenation is a
+  poor teaching model for accumulated errors.
 - Distinguish `Foldable` from `Traverse`:
   - `Foldable` summarizes a structure into a value.
   - `Traverse` walks a structure while sequencing an effect.

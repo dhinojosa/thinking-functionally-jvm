@@ -95,17 +95,41 @@ Functor[Option].map(Some("ada"))(_.toUpperCase)
 * Applies a wrapped function to a wrapped value: `F[A => B]` to `F[A]`
 * Enables independent effects to run without sequencing
 * Remember `Validation`: this is how independent checks combine
-
++
 [source,scala]
 ----
 trait Applicative[F[_]] extends Functor[F]:
   def pure[A](value: A): F[A]
   def ap[A, B](ff: F[A => B])(fa: F[A]): F[B]
-
-validatedName
-  .map(name => email => User(name, email))
-  .ap(validatedEmail)
 ----
+
+=== `Applicative` with `ValidatedNel`
+
+* Combine independent validations
++
+[source,scala]
+----
+Applicative[[A] =>> ValidatedNel[String, A]]
+  .map3(
+    validateName(""),
+    validateSsn("123-44-32013"),
+    validateDateOfBirth(LocalDate.of(1982, 10, 11))
+  )((name, ssn, dateOfBirth) =>
+    Person(name, ssn, dateOfBirth)
+  )
+----
+
+* This returns both validation errors
++
+[source,scala]
+----
+Invalid(NonEmptyList(
+  "Name cannot be blank",
+  "SSN is not valid"
+))
+----
+
+NOTE: `ValidatedNel[String, A]` accumulates errors in a non-empty list.
 
 === `Monad`
 

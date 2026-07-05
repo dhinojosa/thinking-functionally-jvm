@@ -28,3 +28,6 @@ cd slides
 The normal render validates Asciidoctor structure and generated HTML. It does
 not guarantee visual overflow is acceptable; inspect HTML/PDF visually for dense
 slides.
+
+When a slide looks crowded or content is clipped, split it into focused slides
+instead of reducing font size or weakening the example.

@@ -55,6 +55,10 @@ syntax, but do not introduce a new abstraction without a concrete example.
 - Avoid decorative text. Every bullet should earn its place.
 - If a slide becomes dense, split it into multiple slides instead of shrinking
   the idea.
+- If content is cut off near the bottom, split the slide immediately. Do not
+  try to solve teaching-density problems with smaller text.
+- Diagram labels should use deliberate title-style casing when the diagram is
+  presenting named concepts, for example `Domain Values, Commands, Events`.
 
 ## Asciidoctor / Reveal.js
 
@@ -79,3 +83,7 @@ or visual PDF output must be validated.
 The normal render validates Asciidoctor structure, includes, and generated HTML.
 It does not guarantee visual overflow is acceptable. For dense slides, inspect
 the rendered HTML or PDF visually.
+
+Passing the render is not the same as passing the presentation. Any slide with
+multiple code blocks, a diagram, or an admonition near the bottom should get a
+visual check when possible.

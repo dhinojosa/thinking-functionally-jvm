@@ -46,26 +46,4 @@ def prefix(using AppConfig): String =
   summon[AppConfig].prefix
 ----
 
-=== Context Bounds
-
-* Context bounds are compact `using` syntax
-* `F[_]: Monad` means "there is a `Monad[F]` available"
-+
-[source,scala]
-----
-def program[F[_]: Monad](value: Int): F[Int] =
-  Monad[F].pure(value)
-----
-
-=== The Translation
-
-* The compact syntax hides a `using` parameter
-+
-[source,scala]
-----
-def program[F[_]: Monad](value: Int): F[Int]
-
-def program[F[_]](value: Int)(using Monad[F]): F[Int]
-----
-
 NOTE: Typeclasses use this same mechanism; the next chapter gives the pattern a name.

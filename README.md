@@ -82,7 +82,6 @@ In Thinking Functionally in Java, we explore how far disciplined functional desi
     * `given`
     * `using`
     * `summon`
-    * Context bounds
 13. Typeclasses
     * `Show`
     * `Eq`
@@ -104,6 +103,8 @@ In Thinking Functionally in Java, we explore how far disciplined functional desi
 16. Effectful Programs
     * `Future`
     * `IO`
+    * Context Bounds
+    * `MonadThrow`
     * `F[_]`
     * Clocks and Time
     * Programs vs. Values

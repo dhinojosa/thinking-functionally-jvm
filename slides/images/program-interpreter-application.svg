@@ -25,21 +25,21 @@
 
   <rect class="inner" x="155" y="270" width="660" height="95" rx="10"/>
   <text class="text label" x="190" y="330">Data</text>
-  <text class="text body" x="360" y="330">domain values, commands, events</text>
+  <text class="text body" x="360" y="330">Domain Values, Commands, Events</text>
 
   <rect class="inner" x="155" y="400" width="660" height="95" rx="10"/>
   <text class="text label" x="190" y="460">Algebra</text>
-  <text class="text body" x="360" y="460">capabilities, ports, vocabulary</text>
+  <text class="text body" x="360" y="460">Capabilities, Ports, Vocabulary</text>
 
   <rect class="inner" x="155" y="530" width="660" height="95" rx="10"/>
   <text class="text label" x="190" y="590">Programs</text>
-  <text class="text body" x="360" y="590">pipelines, topology, composition</text>
+  <text class="text body" x="360" y="590">Pipelines, Topology, Composition</text>
 
   <rect class="box" x="965" y="245" width="300" height="290" rx="14"/>
   <text class="text label" x="1018" y="325">Interpreter</text>
-  <text class="text body" x="1010" y="390">runs the program</text>
-  <text class="text body" x="1010" y="430">chooses runtime</text>
-  <text class="text body" x="1010" y="470">performs effects</text>
+  <text class="text body" x="1010" y="390">Runs the Program</text>
+  <text class="text body" x="1010" y="430">Chooses Runtime</text>
+  <text class="text body" x="1010" y="470">Performs Effects</text>
 
   <path class="arrow" d="M 870 425 C 905 425 925 425 960 425"/>
 </svg>
