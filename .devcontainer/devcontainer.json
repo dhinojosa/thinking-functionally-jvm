@@ -1,0 +1,22 @@
+{
+  "name": "Thinking Functionally JVM",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "redhat.java",
+        "scalameta.metals"
+      ],
+      "settings": {
+        "java.configuration.updateBuildConfiguration": "interactive",
+        "metals.javaHome": "/usr/local/sdkman/candidates/java/current"
+      }
+    }
+  },
+  "postCreateCommand": "java -version && mvn -version && gradle -version && sbt --version"
+}
