@@ -31,6 +31,10 @@ local.properties
 slides/*.html
 slides/*.pdf
 
+!thinking_functionally_jvm.pdf
+!lab_book/
+!lab_book/**
+
 .claude
 specs/
 .session
