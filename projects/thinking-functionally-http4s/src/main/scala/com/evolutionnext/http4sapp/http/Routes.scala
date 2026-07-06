@@ -21,11 +21,11 @@ object Routes:
   given Codec[AddItemRequest] = deriveCodec
   given Codec[ErrorResponse] = deriveCodec
 
-  def all[F[_]: Concurrent](
-      orderService: OrderService[F],
-      orderQueryService: OrderQueryService[F],
-      customerService: CustomerService[F],
-      inventoryService: InventoryService[F]
+  def all[F[_]: Concurrent, G[_]](
+      orderService: OrderService[F, G],
+      orderQueryService: OrderQueryService[F, G],
+      customerService: CustomerService[F, G],
+      inventoryService: InventoryService[F, G]
   ): HttpRoutes[F] =
     val dsl = new Http4sDsl[F] {}
     import dsl.*

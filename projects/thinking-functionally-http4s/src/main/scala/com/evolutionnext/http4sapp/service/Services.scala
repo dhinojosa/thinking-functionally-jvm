@@ -8,39 +8,42 @@ import com.evolutionnext.http4sapp.domain.OrderCommand.*
 import com.evolutionnext.http4sapp.domain.OrderCommandResult.*
 import com.evolutionnext.http4sapp.domain.OrderError.*
 import com.evolutionnext.http4sapp.repository.*
-import doobie.ConnectionIO
 
-final class CustomerService[F[_]: MonadThrow](
-    customerRepository: CustomerRepository,
-    transaction: FunctionK[ConnectionIO, F]
+final class CustomerService[F[_], G[_]: MonadThrow](
+    customerRepository: CustomerRepository[G],
+    transaction: FunctionK[G, F]
 ):
   def find(customerId: CustomerId): F[Customer] =
-    transaction(customerRepository.find(customerId)).flatMap {
-      case Some(customer) => customer.pure[F]
-      case None => CustomerNotFound(customerId).raiseError[F, Customer]
+    transaction {
+      customerRepository.find(customerId).flatMap {
+        case Some(customer) => customer.pure[G]
+        case None => CustomerNotFound(customerId).raiseError[G, Customer]
+      }
     }
 
   def list: F[List[Customer]] =
     transaction(customerRepository.list)
 
-final class InventoryService[F[_]: MonadThrow](
-    inventoryRepository: InventoryRepository,
-    transaction: FunctionK[ConnectionIO, F]
+final class InventoryService[F[_], G[_]: MonadThrow](
+    inventoryRepository: InventoryRepository[G],
+    transaction: FunctionK[G, F]
 ):
   def find(productId: ProductId): F[Product] =
-    transaction(inventoryRepository.find(productId)).flatMap {
-      case Some(product) => product.pure[F]
-      case None => ProductNotFound(productId).raiseError[F, Product]
+    transaction {
+      inventoryRepository.find(productId).flatMap {
+        case Some(product) => product.pure[G]
+        case None => ProductNotFound(productId).raiseError[G, Product]
+      }
     }
 
   def list: F[List[Product]] =
     transaction(inventoryRepository.list)
 
-final class OrderService[F[_]: MonadThrow](
-    orderRepository: OrderRepository,
-    customerRepository: CustomerRepository,
-    inventoryRepository: InventoryRepository,
-    transaction: FunctionK[ConnectionIO, F]
+final class OrderService[F[_], G[_]: MonadThrow](
+    orderRepository: OrderRepository[G],
+    customerRepository: CustomerRepository[G],
+    inventoryRepository: InventoryRepository[G],
+    transaction: FunctionK[G, F]
 ):
   def execute(command: OrderCommand): F[OrderCommandResult] =
     command match
@@ -52,8 +55,8 @@ final class OrderService[F[_]: MonadThrow](
     transaction {
       for
         customer <- customerRepository.find(customerId).flatMap {
-          case Some(customer) => customer.pure[ConnectionIO]
-          case None => CustomerNotFound(customerId).raiseError[ConnectionIO, Customer]
+          case Some(customer) => customer.pure[G]
+          case None => CustomerNotFound(customerId).raiseError[G, Customer]
         }
         orderId <- orderRepository.create(customer.id)
       yield OrderCreated(orderId)
@@ -62,25 +65,25 @@ final class OrderService[F[_]: MonadThrow](
   private def addItem(orderId: OrderId, productId: ProductId, quantity: Int): F[OrderCommandResult] =
     transaction {
       for
-        _ <- InvalidQuantity(quantity).raiseError[ConnectionIO, Unit].whenA(quantity <= 0)
+        _ <- InvalidQuantity(quantity).raiseError[G, Unit].whenA(quantity <= 0)
         order <- loadOrder(orderId)
-        _ <- OrderAlreadySubmitted(orderId).raiseError[ConnectionIO, Unit]
+        _ <- OrderAlreadySubmitted(orderId).raiseError[G, Unit]
           .whenA(order.status == OrderStatus.Submitted)
         product <- inventoryRepository.find(productId).flatMap {
-          case Some(product) => product.pure[ConnectionIO]
-          case None => ProductNotFound(productId).raiseError[ConnectionIO, Product]
+          case Some(product) => product.pure[G]
+          case None => ProductNotFound(productId).raiseError[G, Product]
         }
         _ <- InsufficientInventory(productId, quantity, product.quantityAvailable)
-          .raiseError[ConnectionIO, Unit]
+          .raiseError[G, Unit]
           .whenA(product.quantityAvailable < quantity)
         _ <- orderRepository.addItem(orderId, product, quantity)
         updated <- loadOrder(orderId)
         customer <- customerRepository.find(updated.customerId).flatMap {
-          case Some(customer) => customer.pure[ConnectionIO]
-          case None => CustomerNotFound(updated.customerId).raiseError[ConnectionIO, Customer]
+          case Some(customer) => customer.pure[G]
+          case None => CustomerNotFound(updated.customerId).raiseError[G, Customer]
         }
         _ <- CreditLimitExceeded(customer.id, updated.total, customer.creditLimit)
-          .raiseError[ConnectionIO, Unit]
+          .raiseError[G, Unit]
           .whenA(updated.total > customer.creditLimit)
       yield ItemAdded(orderId, productId)
     }
@@ -89,17 +92,17 @@ final class OrderService[F[_]: MonadThrow](
     transaction {
       for
         order <- loadOrder(orderId)
-        _ <- OrderAlreadySubmitted(orderId).raiseError[ConnectionIO, Unit]
+        _ <- OrderAlreadySubmitted(orderId).raiseError[G, Unit]
           .whenA(order.status == OrderStatus.Submitted)
         _ <- order.items.traverse_ { item =>
           for
             product <- inventoryRepository.find(item.productId).flatMap {
-              case Some(product) => product.pure[ConnectionIO]
-              case None => ProductNotFound(item.productId).raiseError[ConnectionIO, Product]
+              case Some(product) => product.pure[G]
+              case None => ProductNotFound(item.productId).raiseError[G, Product]
             }
             reserved <- inventoryRepository.reserve(item.productId, item.quantity)
             _ <- InsufficientInventory(item.productId, item.quantity, product.quantityAvailable)
-              .raiseError[ConnectionIO, Unit]
+              .raiseError[G, Unit]
               .whenA(reserved == 0)
           yield ()
         }
@@ -107,21 +110,21 @@ final class OrderService[F[_]: MonadThrow](
       yield OrderSubmitted(orderId)
     }
 
-  private def loadOrder(orderId: OrderId): ConnectionIO[Order] =
+  private def loadOrder(orderId: OrderId): G[Order] =
     orderRepository.find(orderId).flatMap {
-      case Some(order) => order.pure[ConnectionIO]
-      case None => OrderNotFound(orderId).raiseError[ConnectionIO, Order]
+      case Some(order) => order.pure[G]
+      case None => OrderNotFound(orderId).raiseError[G, Order]
     }
 
-final class OrderQueryService[F[_]: MonadThrow](
-    orderRepository: OrderRepository,
-    transaction: FunctionK[ConnectionIO, F]
+final class OrderQueryService[F[_], G[_]: MonadThrow](
+    orderRepository: OrderRepository[G],
+    transaction: FunctionK[G, F]
 ):
   def find(orderId: OrderId): F[Order] =
     transaction(loadOrder(orderId))
 
-  private def loadOrder(orderId: OrderId): ConnectionIO[Order] =
+  private def loadOrder(orderId: OrderId): G[Order] =
     orderRepository.find(orderId).flatMap {
-      case Some(order) => order.pure[ConnectionIO]
-      case None => OrderNotFound(orderId).raiseError[ConnectionIO, Order]
+      case Some(order) => order.pure[G]
+      case None => OrderNotFound(orderId).raiseError[G, Order]
     }

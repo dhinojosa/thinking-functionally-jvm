@@ -9,6 +9,7 @@ import com.evolutionnext.http4sapp.db.Database
 import com.evolutionnext.http4sapp.http.Routes
 import com.evolutionnext.http4sapp.repository.*
 import com.evolutionnext.http4sapp.service.*
+import doobie.ConnectionIO
 import org.http4s.ember.server.EmberServerBuilder
 import org.http4s.server.Router
 import org.typelevel.log4cats.LoggerFactory
@@ -25,18 +26,23 @@ object Main extends IOApp.Simple:
       val inventoryRepository = DoobieInventoryRepository()
       val orderRepository = DoobieOrderRepository()
 
-      val customerService = CustomerService[IO](customerRepository, transaction)
-      val inventoryService = InventoryService[IO](inventoryRepository, transaction)
-      val orderService = OrderService[IO](
+      val customerService = CustomerService[IO, ConnectionIO](customerRepository, transaction)
+      val inventoryService = InventoryService[IO, ConnectionIO](inventoryRepository, transaction)
+      val orderService = OrderService[IO, ConnectionIO](
         orderRepository,
         customerRepository,
         inventoryRepository,
         transaction
       )
-      val orderQueryService = OrderQueryService[IO](orderRepository, transaction)
+      val orderQueryService = OrderQueryService[IO, ConnectionIO](orderRepository, transaction)
 
       val routes = Router(
-        "/api" -> Routes.all[IO](orderService, orderQueryService, customerService, inventoryService)
+        "/api" -> Routes.all[IO, ConnectionIO](
+          orderService,
+          orderQueryService,
+          customerService,
+          inventoryService
+        )
       ).orNotFound
 
       for

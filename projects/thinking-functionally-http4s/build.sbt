@@ -22,6 +22,8 @@ lazy val root = (project in file("."))
       "io.circe" %% "circe-generic" % circeVersion,
       "io.circe" %% "circe-parser" % circeVersion,
       "org.typelevel" %% "log4cats-slf4j" % "2.8.0",
-      "ch.qos.logback" % "logback-classic" % "1.5.18"
-    )
+      "ch.qos.logback" % "logback-classic" % "1.5.18",
+      "com.disneystreaming" %% "weaver-cats" % "0.8.4" % Test
+    ),
+    testFrameworks += new TestFramework("weaver.framework.CatsEffect")
   )

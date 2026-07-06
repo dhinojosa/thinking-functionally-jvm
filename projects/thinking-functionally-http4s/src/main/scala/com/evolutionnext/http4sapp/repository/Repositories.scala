@@ -5,22 +5,22 @@ import com.evolutionnext.http4sapp.domain.*
 import doobie.ConnectionIO
 import doobie.implicits.*
 
-trait CustomerRepository:
-  def find(customerId: CustomerId): ConnectionIO[Option[Customer]]
-  def list: ConnectionIO[List[Customer]]
+trait CustomerRepository[F[_]]:
+  def find(customerId: CustomerId): F[Option[Customer]]
+  def list: F[List[Customer]]
 
-trait InventoryRepository:
-  def find(productId: ProductId): ConnectionIO[Option[Product]]
-  def list: ConnectionIO[List[Product]]
-  def reserve(productId: ProductId, quantity: Int): ConnectionIO[Int]
+trait InventoryRepository[F[_]]:
+  def find(productId: ProductId): F[Option[Product]]
+  def list: F[List[Product]]
+  def reserve(productId: ProductId, quantity: Int): F[Int]
 
-trait OrderRepository:
-  def create(customerId: CustomerId): ConnectionIO[OrderId]
-  def find(orderId: OrderId): ConnectionIO[Option[Order]]
-  def addItem(orderId: OrderId, product: Product, quantity: Int): ConnectionIO[Unit]
-  def submit(orderId: OrderId): ConnectionIO[Unit]
+trait OrderRepository[F[_]]:
+  def create(customerId: CustomerId): F[OrderId]
+  def find(orderId: OrderId): F[Option[Order]]
+  def addItem(orderId: OrderId, product: Product, quantity: Int): F[Unit]
+  def submit(orderId: OrderId): F[Unit]
 
-final class DoobieCustomerRepository extends CustomerRepository:
+final class DoobieCustomerRepository extends CustomerRepository[ConnectionIO]:
   def find(customerId: CustomerId): ConnectionIO[Option[Customer]] =
     sql"""
       SELECT id, name, credit_limit
@@ -41,7 +41,7 @@ final class DoobieCustomerRepository extends CustomerRepository:
       .map((id, name, creditLimit) => Customer(CustomerId(id), name, Money(creditLimit)))
       .to[List]
 
-final class DoobieInventoryRepository extends InventoryRepository:
+final class DoobieInventoryRepository extends InventoryRepository[ConnectionIO]:
   def find(productId: ProductId): ConnectionIO[Option[Product]] =
     sql"""
       SELECT id, name, price, quantity_available
@@ -70,7 +70,7 @@ final class DoobieInventoryRepository extends InventoryRepository:
         AND quantity_available >= $quantity
     """.update.run
 
-final class DoobieOrderRepository extends OrderRepository:
+final class DoobieOrderRepository extends OrderRepository[ConnectionIO]:
   def create(customerId: CustomerId): ConnectionIO[OrderId] =
     sql"""
       INSERT INTO orders (customer_id, status)
