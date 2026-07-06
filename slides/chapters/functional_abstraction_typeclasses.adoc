@@ -134,15 +134,45 @@ NOTE: `ValidatedNel[String, A]` accumulates errors in a non-empty list.
 === `Monad`
 
 * A `Functor` with `flatMap`: chains dependent computations
-* For-comprehensions in Scala desugar to nested `flatMap` calls
 * Remember `flatMap`: this is the abstraction behind it
 
+=== For-Comprehensions
+
+* Scala syntax for nested `flatMap` and a final `map`
+* Everything to the right of `<-` must be the same context type
++
 [source,scala]
 ----
 for {
-  user  <- findUser(id)
-  order <- findOrder(user.id)
-} yield order
+  x <- Option(3)
+  y <- Option(2)
+  z <- Option(1)
+} yield x + y + z
+----
+
+=== These Two Are Equal
+
+* Nested `flatMap` and `map`
++
+[source,scala]
+----
+Option(3)
+  .flatMap(x =>
+    Option(2)
+      .flatMap(y =>
+        Option(1)
+          .map(z => x + y + z)))
+----
+
+* The same expression as a `for`-comprehension
++
+[source,scala]
+----
+for {
+  x <- Option(3)
+  y <- Option(2)
+  z <- Option(1)
+} yield x + y + z
 ----
 
 === In-Channel Errors
