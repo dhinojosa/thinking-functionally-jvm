@@ -24,9 +24,10 @@ PORT=8082 sbt run
 ----
 
 . Review the shape of the application.
-.. Repositories return `ConnectionIO`.
-.. Services are parameterized by `F[_]`.
-.. `OrderService` receives a `ConnectionIO ~> F`.
+.. Repository traits are parameterized by `G[_]`.
+.. Doobie repositories use `ConnectionIO`.
+.. Services are parameterized by both `F[_]` and `G[_]`.
+.. `OrderService` receives a `G ~> F`.
 .. HTTP routes run in `IO`.
 . Show where the transaction interpreter is created.
 +
@@ -39,12 +40,19 @@ val transaction = xa.trans
 +
 [source,scala]
 ----
-val orderService = OrderService[IO](
+val orderService = OrderService[IO, ConnectionIO](
   orderRepository,
   customerRepository,
   inventoryRepository,
   transaction
 )
+----
+
+. Show that the same service can be tested without `ConnectionIO`.
++
+[source,bash]
+----
+sbt "testOnly com.evolutionnext.http4sapp.service.OrderServiceSuite"
 ----
 
 . Run a simple flow.
@@ -73,6 +81,6 @@ curl -X POST http://localhost:8082/api/orders/1/submit
 docker compose stop postgres
 ----
 
-NOTE: The transaction boundary is explicit: database programs are described as `ConnectionIO` and interpreted into `IO`.
+NOTE: The transaction boundary is explicit in production, but the service can be tested with a different repository effect.
 
 image::stop.png[width=10%, height=10%, align=center]

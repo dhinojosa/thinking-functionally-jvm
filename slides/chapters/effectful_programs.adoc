@@ -192,16 +192,3 @@ val test: State[TestWorld, OrderId] =
 
 * A program is just a value until interpreted: it can be inspected, composed, retried
 * Separating description from execution is the foundation of effect systems
-
-[.columns]
-=== Demo: Swapping an Effect in Cats
-
-[.column]
---
-image::legolab.jpg[]
---
-
-[.column]
---
-Let's see the same program run with a production effect and a testing effect.
---
