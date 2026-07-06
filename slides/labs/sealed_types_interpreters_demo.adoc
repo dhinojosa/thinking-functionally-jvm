@@ -1,0 +1,34 @@
+== Demo 1: Sealed Types and Interpreters in Java
+
+This is an instructor-led demo, not an attendee lab.
+
+. Open the Java project.
++
+[source,bash]
+----
+cd projects/thinking-functionally-java
+----
+
+. Review the sealed type examples under `com.evolutionnext.sealed`.
+.. `shapes`
+.. `optionals`
+.. `haskelllist`
+.. `functional`
+. In `com.evolutionnext.sealed.functional`, review the small expression language.
+.. `Expression`
+.. `Constant`
+.. `Sum`
+.. `Subtract`
+.. `Multiply`
+.. `Evaluator`
+. Show how the data describes the expression before anything interprets it.
+. Run the evaluator test.
++
+[source,bash]
+----
+mvn test -Dtest="EvaluatorTest"
+----
+
+NOTE: The point of the demo is description first, interpretation second.
+
+image::stop.png[width=10%, height=10%, align=center]

@@ -1,0 +1,78 @@
+== Demo 3: HTTP4s and Transactions
+
+This is an instructor-led demo, not an attendee lab.
+
+. Open the http4s project.
++
+[source,bash]
+----
+cd projects/thinking-functionally-http4s
+----
+
+. Start Postgres.
++
+[source,bash]
+----
+docker compose up -d postgres
+----
+
+. Start the API.
++
+[source,bash]
+----
+PORT=8082 sbt run
+----
+
+. Review the shape of the application.
+.. Repositories return `ConnectionIO`.
+.. Services are parameterized by `F[_]`.
+.. `OrderService` receives a `ConnectionIO ~> F`.
+.. HTTP routes run in `IO`.
+. Show where the transaction interpreter is created.
++
+[source,scala]
+----
+val transaction = xa.trans
+----
+
+. Show where the transaction is injected into the services.
++
+[source,scala]
+----
+val orderService = OrderService[IO](
+  orderRepository,
+  customerRepository,
+  inventoryRepository,
+  transaction
+)
+----
+
+. Run a simple flow.
++
+[source,bash]
+----
+curl http://localhost:8082/api/customers
+
+curl http://localhost:8082/api/inventory
+
+curl -X POST http://localhost:8082/api/orders \
+  -H 'Content-Type: application/json' \
+  -d '{"customerId":"cust-1"}'
+
+curl -X POST http://localhost:8082/api/orders/1/items \
+  -H 'Content-Type: application/json' \
+  -d '{"productId":"prod-1","quantity":2}'
+
+curl -X POST http://localhost:8082/api/orders/1/submit
+----
+
+. Stop Postgres when finished.
++
+[source,bash]
+----
+docker compose stop postgres
+----
+
+NOTE: The transaction boundary is explicit: database programs are described as `ConnectionIO` and interpreted into `IO`.
+
+image::stop.png[width=10%, height=10%, align=center]

@@ -21,4 +21,10 @@ Daniel Hinojosa
 :toc: left
 :experimental:
 
+include::labs/sealed_types_interpreters_demo.adoc[]
+
+include::labs/either_conversion_demo.adoc[]
+
 include::labs/composing_quote.adoc[]
+
+include::labs/http4s_transactions_demo.adoc[]

@@ -1,4 +1,6 @@
-== Lab 1: Building a Customer Quote
+== Lab 1: Functional Behaviors
+
+=== Part 1: Building a Customer Quote
 
 . Look for the domain models in `com.evolutionnext.sales.domain`
 .. `CustomerId`
@@ -40,5 +42,142 @@ mvn test -Dtest="QuoteServiceTest#testQuoteFailure"
 .. Which operation appeared only once?
 .. Why?
 .. Does this style remind you of another Java API?
+
+=== Part 2: `CompletableFuture.thenCompose`
+
+This is a canned example to inspect, not a build-from-scratch exercise.
+
+. Open `com.evolutionnext.weather.WeatherReportService`.
+. Notice the return type.
++
+[source,java]
+----
+public static CompletableFuture<Fahrenheit> currentTemperature(String city) {
+    ...
+}
+----
++
+. Open `com.evolutionnext.weather.WeatherReportServiceTest`.
+. Read the call chain.
++
+[source,java]
+----
+CompletableFuture<Fahrenheit> result = CityService
+    .getCity()
+    .thenCompose(WeatherReportService::currentTemperature);
+----
++
+.. First, get the city asynchronously.
+.. Then, use that city to get the temperature asynchronously.
+.. Flatten the nested future with `thenCompose`.
+. Run the test.
++
+[source,bash]
+----
+mvn test -Dtest="WeatherReportServiceTest"
+----
+
+=== Part 3: Create a `Validated` Harness
+
+In this exercise, you will create a small `Validated` type in Java.
+
+. Open `com.evolutionnext.validation.ValidatedHarnessTest` in _src/test/java_.
+. Remove the `@Disabled` annotation.
+. Open `com.evolutionnext.validation.Validated` in _src/main/java_.
+. Read the starter implementation.
+. Notice the two cases:
+.. `Valid<T>` holds a successful value.
+.. `Invalid<T>` holds one or more error messages.
+. Read the factory methods. These are already implemented.
++
+[source,java]
+----
+static <T> Validated<T> valid(T value)
+static <T> Validated<T> invalid(String error)
+static <T> Validated<T> invalid(List<String> errors)
+----
++
+. Find `map` on `Valid<T>`.
+. Remove the `UnsupportedOperationException` and replace it with what you think should happen.
++
+[source,java]
+----
+record Valid<T>(T value) implements Validated<T> {
+    @Override
+    public <U> Validated<U> map(Function<T, U> f) {
+        throw new UnsupportedOperationException("Implement this");
+    }
+}
+----
++
+.Click here for the answer
+[%collapsible]
+====
+[source,java]
+----
+record Valid<T>(T value) implements Validated<T> {
+    @Override
+    public <U> Validated<U> map(Function<T, U> f) {
+        return Validated.valid(f.apply(value));
+    }
+}
+----
+====
++
+. Find `map` on `Invalid<T>`.
+. Remove the `UnsupportedOperationException` and replace it with what you think should happen.
++
+[source,java]
+----
+record Invalid<T>(List<String> errors) implements Validated<T> {
+    @Override
+    public <U> Validated<U> map(Function<T, U> f) {
+        throw new UnsupportedOperationException("Implement this");
+    }
+}
+----
++
+.Click here for the answer
+[%collapsible]
+====
+[source,java]
+----
+record Invalid<T>(List<String> errors) implements Validated<T> {
+    @Override
+    public <U> Validated<U> map(Function<T, U> f) {
+        return Validated.invalid(errors);
+    }
+}
+----
+====
++
+. Read the three-value combinator.
++
+[source,java]
+----
+static <A, B, C> Builder3<A, B, C> combine(
+    Validated<A> a,
+    Validated<B> b,
+    Validated<C> c)
+----
++
+. The builder already supports mapping three valid values into one result.
++
+[source,java]
+----
+Validated
+    .combine(name, email, age)
+    .map(Customer::new);
+----
++
+. If more than one input is invalid, accumulate all errors.
+. Run the test.
++
+[source,bash]
+----
+mvn test -Dtest="ValidatedHarnessTest"
+----
+
+NOTE: `Validated` is different from `flatMap`; it is useful when independent checks should all run.
 
 image::stop.png[width=10%, height=10%, align=center]

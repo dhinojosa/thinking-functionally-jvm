@@ -1,0 +1,44 @@
+== Demo 2: Creating an `Either`
+
+This is an instructor-led demo. I will drive the conversion during the workshop.
+
+If you have an agent available, you can use the same approach later on your own code.
+
+. Open the Java HexArch example.
++
+[source,bash]
+----
+cd projects/thinking-functionally-java
+----
+
+. Review `OrderApplicationService`.
++
+[source,java]
+----
+public OrderResult handle(OrderCommand command) {
+    ...
+}
+----
+
+. Watch as I ask Codex to create a small Java `Either` type.
+. Watch as I ask Codex to convert the command handler to return an error channel explicitly.
++
+[source,java]
+----
+public Either<OrderError, OrderResult> handle(OrderCommand command) {
+    ...
+}
+----
+
+. Keep the command model as sealed data.
+. Move failures out of ad hoc result handling and into the left side of `Either`.
+. Run the HexArch test.
++
+[source,bash]
+----
+mvn test -Dtest="OrderApplicationServiceTest"
+----
+
+NOTE: This demo shows how errors can become composable data without losing the sealed command model.
+
+image::stop.png[width=10%, height=10%, align=center]
