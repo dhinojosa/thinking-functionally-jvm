@@ -14,6 +14,28 @@ In Thinking Functionally in Java, we explore how far disciplined functional desi
 * Putting It Together: Designing a small, readable service that isolates side effects and composes cleanly.
 * Breaking the Java Wall: A look at higher-kinded types, effects, and what Java still can’t express in languages other than Java
 
+## Requirements
+
+You have two choices: load everything or use Codespaces and don't worry about setup.
+
+### For the Load Everything Option
+
+* JDK 25+
+* IntelliJ IDEA with the Scala plugin, or VS Code with the Red Hat Java plugin and Metals plugin
+* Maven
+* SBT
+* Git
+
+### Run in Codespaces
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/dhinojosa/thinking-functionally-jvm?quickstart=1)
+
+1. Go to https://github.com/dhinojosa/thinking-functionally-jvm
+2. Click the green *Code* button and select *Codespaces*
+3. Click the *Create Codespace on main* button
+
+The following will provide you with an online application using a VS Code instance.
+
 ## Agenda
 
 1. Reproducible Development Environments
