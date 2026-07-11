@@ -14,7 +14,7 @@
       ],
       "settings": {
         "java.configuration.updateBuildConfiguration": "interactive",
-        "metals.javaHome": "/usr/local/sdkman/candidates/java/current"
+        "metals.javaHome": "/usr/local/sdkman/candidates/java/21.0.4-zulu"
       }
     }
   },
