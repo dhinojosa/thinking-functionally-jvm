@@ -3,6 +3,12 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+  },
+  "remoteEnv": {
+    "JAVA_HOME": "/opt/java/jdk-21"
+  },
   "customizations": {
     "vscode": {
       "extensions": [
@@ -10,11 +16,26 @@
         "scalameta.metals"
       ],
       "settings": {
+        "java.jdt.ls.java.home": "/opt/java/jdk-21",
+        "java.configuration.runtimes": [
+          {
+            "name": "JavaSE-21",
+            "path": "/opt/java/jdk-21"
+          },
+          {
+            "name": "JavaSE-26",
+            "path": "/opt/java/jdk-26",
+            "default": true
+          }
+        ],
         "java.configuration.updateBuildConfiguration": "interactive",
         "metals.javaVersion": "21",
-        "metals.javaHome": "/usr/local/sdkman/candidates/java/current"
+        "metals.javaHome": "/opt/java/jdk-21",
+        "terminal.integrated.env.linux": {
+          "JAVA_HOME": "/opt/java/jdk-26"
+        }
       }
     }
   },
-  "postCreateCommand": "java -version && mvn -version && gradle -version && sbt --version"
+  "postCreateCommand": "export JAVA_HOME=/opt/java/jdk-26 && java -version && mvn -version && gradle -version && sbt --version"
 }
