@@ -3,9 +3,6 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
-  "remoteEnv": {
-    "JAVA_HOME": "/usr/local/sdkman/candidates/java/21.0.4-zulu"
-  },
   "customizations": {
     "vscode": {
       "extensions": [
@@ -15,11 +12,7 @@
       "settings": {
         "java.configuration.updateBuildConfiguration": "interactive",
         "metals.javaVersion": "21",
-        "metals.javaHome": "/usr/local/sdkman/candidates/java/21.0.4-zulu",
-        "terminal.integrated.env.linux": {
-          "JAVA_HOME": "/usr/local/sdkman/candidates/java/26-zulu",
-          "PATH": "/usr/local/sdkman/candidates/java/26-zulu/bin:${env:PATH}"
-        }
+        "metals.javaHome": "/usr/local/sdkman/candidates/java/current"
       }
     }
   },
