@@ -7,5 +7,7 @@ RUN bash -lc 'source /usr/local/sdkman/bin/sdkman-init.sh && sdk install java 21
 
 USER vscode
 
+ENV PATH="/home/vscode/.local/bin:${PATH}"
+
 RUN mkdir -p /home/vscode/.local/bin \
     && cs install --install-dir /home/vscode/.local/bin sbt scala scalac
