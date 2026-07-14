@@ -1,11 +1,13 @@
 package com.evolutionnext.hexarch.order.service;
 
+import com.evolutionnext.hexarch.common.Either;
 import com.evolutionnext.hexarch.customer.domain.Customer;
 import com.evolutionnext.hexarch.customer.domain.CustomerId;
 import com.evolutionnext.hexarch.customer.service.CustomerRepository;
 import com.evolutionnext.hexarch.order.command.OrderCommand;
 import com.evolutionnext.hexarch.order.domain.Order;
 import com.evolutionnext.hexarch.order.domain.OrderId;
+import com.evolutionnext.hexarch.order.error.OrderError;
 import com.evolutionnext.hexarch.order.error.OrderResult;
 import com.evolutionnext.inventory.domain.Product;
 import com.evolutionnext.inventory.domain.ProductId;
@@ -42,8 +44,30 @@ class OrderApplicationServiceTest {
             new OrderCommand.AddLineItem(orderId, customerId, productId, 2));
         var submitResult = service.handle(new OrderCommand.SubmitOrder(orderId));
 
-        assertThat(addResult).isEqualTo(new OrderResult.Success(orderId));
-        assertThat(submitResult).isEqualTo(new OrderResult.Success(orderId));
+        //HTTP
+//        var result = switch(submitResult) {
+//            case Either.Left(var orderError) -> {
+//                return switch(orderError) {
+//                    case OrderError.CustomerNotFound customerNotFound -> null;
+//                    case OrderError.EmptyOrder emptyOrder -> null;
+//                    case OrderError.NegativeQuantity negativeQuantity -> null;
+//                    case OrderError.OrderAlreadySubmitted orderAlreadySubmitted -> null;
+//                    case OrderError.OrderNotFound orderNotFound -> null;
+//                    case OrderError.ProductNotFound productNotFound -> null;
+//                };
+//            }
+//            case Either.Right(var orderResult) -> {
+//                return switch(orderResult) {
+//                    case OrderResult.ItemAdded itemAdded -> null;
+//                    case OrderResult.ItemRemoved itemRemoved -> null;
+//                    case OrderResult.OrderSubmitted orderSubmitted -> null;
+//                };
+//            }
+//        };
+        assertThat(addResult)
+            .isEqualTo(Either.right(new OrderResult.ItemAdded(orderId, productId)));
+        assertThat(submitResult)
+            .isEqualTo(Either.right(new OrderResult.OrderSubmitted(orderId)));
         assertThat(orders.load(orderId))
             .get()
             .extracting(Order::submitted)
@@ -70,7 +94,7 @@ class OrderApplicationServiceTest {
             new OrderCommand.AddLineItem(orderId, customerId, productId, 2));
 
         assertThat(result)
-            .isEqualTo(new OrderResult.Failure("Product not found"));
+            .isEqualTo(Either.left(new OrderError.ProductNotFound()));
         assertThat(orders.load(orderId)).isEmpty();
     }
 
