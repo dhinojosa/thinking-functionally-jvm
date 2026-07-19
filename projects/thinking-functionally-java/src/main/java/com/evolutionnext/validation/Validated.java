@@ -32,14 +32,14 @@ public sealed interface Validated<T>
     record Valid<T>(T value) implements Validated<T> {
         @Override
         public <U> Validated<U> map(Function<T, U> f) {
-            throw new UnsupportedOperationException("Implement this");
+            return new Valid<>(f.apply(value));
         }
     }
 
     record Invalid<T>(List<String> errors) implements Validated<T> {
         @Override
         public <U> Validated<U> map(Function<T, U> f) {
-            throw new UnsupportedOperationException("Implement this");
+            return new Invalid<>(errors);
         }
     }
 

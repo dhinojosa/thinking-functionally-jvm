@@ -2,17 +2,21 @@ package com.evolutionnext.sales.service;
 
 
 import com.evolutionnext.sales.domain.*;
+import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 public class QuoteServiceTest {
 
     @Test
-    @Disabled
     public void testQuoteSuccess() {
+        Comparator<Customer> compareCustomerByFirstName = Comparator.comparing(Customer::firstName);
+        Comparator<Customer> compareCustomerByLastName = Comparator.comparing(Customer::lastName);
+
         CustomerService customerService = id ->
             Optional.of(new Customer(id, "Bob", "Frankin"));
 
@@ -26,7 +30,7 @@ public class QuoteServiceTest {
 
         QuoteService quoteService = new QuoteService(customerService, orderService, discountService);
         Optional<Quote> quote = quoteService.createQuote(new CustomerId(30L));
-        //add assertion
+        assertThat(quote).isPresent();
     }
 
     @Test
@@ -45,6 +49,6 @@ public class QuoteServiceTest {
 
         QuoteService quoteService = new QuoteService(customerService, orderService, discountService);
         Optional<Quote> quote = quoteService.createQuote(new CustomerId(30L));
-        //add assertion
+        assertThat(quote).isEmpty();
     }
 }

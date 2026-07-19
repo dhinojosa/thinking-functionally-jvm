@@ -12,6 +12,7 @@ public class MyListTest {
 
     @Test
     void testHaskellListAsOneElement() {
+
         MyList<Integer> integerMyList = new MyCons<>(1, new MyNil<>());
     }
 

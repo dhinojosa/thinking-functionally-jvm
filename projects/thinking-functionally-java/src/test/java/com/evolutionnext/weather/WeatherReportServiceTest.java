@@ -10,7 +10,8 @@ class WeatherReportServiceTest {
     @Test
     void usesThenComposeToFetchTemperatureAfterCity() {
         CompletableFuture<Fahrenheit> result =
-            CityService.getCity().thenCompose(WeatherReportService::currentTemperature);
+            CityService.getCity().thenCompose(city ->
+                WeatherReportService.currentTemperature(city));
 
         assertThat(result.join())
             .isEqualTo(new Fahrenheit(72.0));

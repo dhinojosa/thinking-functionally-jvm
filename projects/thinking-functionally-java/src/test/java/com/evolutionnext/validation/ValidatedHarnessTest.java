@@ -1,5 +1,6 @@
 package com.evolutionnext.validation;
 
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -7,7 +8,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Disabled("Workshop exercise: create Validated and make these tests pass")
 class ValidatedHarnessTest {
     record Customer(String name, String email, int age) {}
 
@@ -36,7 +36,7 @@ class ValidatedHarnessTest {
         var email = Validated.valid("ada@example.com");
         var age = Validated.valid(36);
 
-        var result = Validated
+        Validated<Customer> result = Validated
             .combine(name, email, age)
             .map(Customer::new);
 
@@ -46,17 +46,32 @@ class ValidatedHarnessTest {
 
     @Test
     void invalidValuesAccumulateErrors() {
-        var name = Validated.<String>invalid("Name cannot be blank");
-        var email = Validated.<String>invalid("Email must contain @");
-        var age = Validated.valid(36);
+        var name = validateName("");
+        var email = validateEmailFailure("N/A");
+        var ageValid = validateAge(36);
 
-        var result = Validated
-            .combine(name, email, age)
+        Validated<Customer> result = Validated
+            .combine(name, email, ageValid)
             .map(Customer::new);
 
         assertThat(result).isEqualTo(
             Validated.invalid(List.of(
                 "Name cannot be blank",
                 "Email must contain @")));
+    }
+
+    private static @NonNull Validated<Integer> validateAge(int age) {
+        return Validated.valid(age);
+    }
+
+    private static @NonNull Validated<String> validateEmailFailure(String email) {
+        return Validated.<String>invalid("Email must contain @");
+    }
+
+    private static @NonNull Validated<String> validateName(String name) {
+        if (name.isEmpty()) {
+            return Validated.invalid("Name cannot be blank");
+        }
+        return Validated.valid(name);
     }
 }
